@@ -39,10 +39,17 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
             data.getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
             data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
         }
+
+        data.getConnectionProcessor().process(event);
     }
 
     @Override
     public void onPacketPlaySend(PacketPlaySendEvent event) {
+        PlayerData data = FoxAC.getInstance().getManager().getData(event.getUser());
+
+        if (data == null) return;
+
+        data.getConnectionProcessor().process(event);
 
     }
 }
