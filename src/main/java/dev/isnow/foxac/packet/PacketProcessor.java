@@ -9,6 +9,7 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import dev.isnow.foxac.FoxAC;
+import dev.isnow.foxac.data.PlayerData;
 
 public class PacketProcessor extends SimplePacketListenerAbstract {
 
@@ -25,8 +26,13 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
     @Override
     public void onPacketPlayReceive(PacketPlayReceiveEvent event) {
-        if(event.getPacketType() == PacketType.Play.Client.PLAYER_FLYING) {
-            FoxAC.getInstance().getManager().getData(event.getUser()).getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
+        PlayerData data = FoxAC.getInstance().getManager().getData(event.getUser());
+
+        if (data == null) return;
+
+        if (event.getPacketType() == PacketType.Play.Client.PLAYER_FLYING) {
+            data.getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
+            data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
         }
     }
 
