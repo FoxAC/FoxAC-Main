@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
  * @author Lindgey
  * made on dev.isnow.foxac.pledge
  */
+
 public class PledgeListener implements TransactionListener {
     @Override
     public void onSendStart(TransactionEvent event) {

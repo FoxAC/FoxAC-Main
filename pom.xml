@@ -81,6 +81,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.ThomasOM</groupId>
+            <artifactId>Pledge</artifactId>
+            <version>6cecf0daff</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.retrooper.packetevents</groupId>
             <artifactId>spigot</artifactId>
             <version>2.0-c41f1797e8-1</version>

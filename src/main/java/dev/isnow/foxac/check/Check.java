@@ -2,6 +2,11 @@ package dev.isnow.foxac.check;
 
 import dev.isnow.foxac.data.PlayerData;
 
+/**
+ * @author 5170
+ * made on dev.isnow.foxac.check
+ */
+
 public abstract class Check {
 
     private final String name;

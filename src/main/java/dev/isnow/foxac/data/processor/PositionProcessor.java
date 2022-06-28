@@ -6,6 +6,11 @@ import dev.isnow.foxac.data.PlayerData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 5170
+ * made on dev.isnow.foxac.data.processor
+ */
+
 @RequiredArgsConstructor
 @Getter
 public class PositionProcessor {
