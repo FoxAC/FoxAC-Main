@@ -2,6 +2,7 @@ package dev.isnow.foxac.config;
 
 import dev.isnow.foxac.FoxAC;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,6 +24,7 @@ public class Config {
     private final Boolean antiVPN, debugMode, clientBlacklist, ghostBlockProcessor;
 
     private final HashMap<String, Theme> themes = new HashMap<>();
+    private final String currentTheme;
 
     public Config() {
         FileConfiguration config = FoxAC.getInstance().getConfig();
@@ -38,10 +40,27 @@ public class Config {
         clientBlacklist = config.getBoolean("settings.client-blacklist");
         ghostBlockProcessor = config.getBoolean("settings.ghostblock-processor");
 
+        currentTheme = config.getString("current-theme");
+
         for(String themeName : themesConfig.getConfigurationSection("themes").getKeys(false)) {
             String staticString = "themes." + themeName + ".";
-            themes.put(themeName, new Theme(themesConfig.getString(staticString + "alerts"), themesConfig.getString(staticString + "color_low"));
+            themes.put(themeName, new Theme(
+                    themesConfig.getString(staticString + "alerts"),
+                    themesConfig.getString(staticString + "color_low"),
+                    themesConfig.getString(staticString + "color_medium"),
+                    themesConfig.getString(staticString + "color_high"),
+                    themesConfig.getString(staticString + "experimental"),
+                    themesConfig.getString(staticString + "prefix"),
+                    themesConfig.getString(staticString + "alerts-on"),
+                    themesConfig.getString(staticString + "alerts-off"),
+                    themesConfig.getString(staticString + "vpn-kick-message"),
+                    themesConfig.getString(staticString + "banning-message"),
+                    themesConfig.getString(staticString + "join-message"),
+                    themesConfig.getString(staticString + "client-kick"),
+                    themesConfig.getString(staticString + "broadcast-message")));
+            Bukkit.getConsoleSender().sendMessage("Theme " + themeName + " loaded!");
         }
+
     }
 
     private void createAdditionalFiles() {

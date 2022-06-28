@@ -10,5 +10,5 @@ import lombok.AllArgsConstructor;
 // ik this is a bad way to store those but im too lazy to think
 @AllArgsConstructor
 public class Theme {
-    String alerts, colorLow, colorMedium, experimental, prefix, alertsOn, alertsOff, vpnKick, banning, joinMessage, clientKick, broadcastMessage;
+    String alerts, colorLow, colorMedium, colorHigh, experimental, prefix, alertsOn, alertsOff, vpnKick, banning, joinMessage, clientKick, broadcastMessage;
 }

@@ -14,9 +14,6 @@ public abstract class Check {
     private final Category category;
     private final boolean experimental;
 
-    private final String description;
-    private final int maxvl;
-
     private int vl;
 
     protected Check(String name, String type, Category category, boolean experimental) {
