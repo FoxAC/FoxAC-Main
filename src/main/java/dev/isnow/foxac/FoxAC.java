@@ -20,8 +20,9 @@ public final class FoxAC extends JavaPlugin {
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
 
         PacketEvents.getAPI().getSettings()
-                .checkForUpdates(true)
-                .bStats(true);
+                .checkForUpdates(false)
+                .bStats(false)
+                .debug(false);
         PacketEvents.getAPI().load();
     }
     @Override
