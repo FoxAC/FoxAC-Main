@@ -1,0 +1,29 @@
+combat:
+  aura:
+    a:
+      description: "Detects if player is still sprinting after an entity interaction."
+      maxvl: 5
+      enabled: true
+movement:
+  speed:
+    a:
+      description: "Predicts player's maximum ΔXZ based on situations."
+      maxvl: 20
+      enabled: true
+  motion:
+    a:
+      description: "Detects invalid motion on ladders."
+      maxvl: 10
+      enabled: true
+player:
+  timer:
+    a:
+      description: "Detects game speed modifications."
+      maxvl: 50
+      enabled: true
+exploit:
+  groundspoof:
+    a:
+      description: "Detects if player is spoofing their ground status."
+      maxvl: 2
+      enabled: true

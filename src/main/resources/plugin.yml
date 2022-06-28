@@ -1,0 +1,4 @@
+name: QuickAC
+version: '${project.version}'
+main: dev.isnow.quickac.QuickAC
+api-version: 1.19
