@@ -1,27 +1,27 @@
 package dev.isnow.foxac.check;
 
+import dev.isnow.foxac.data.PlayerData;
+
 public abstract class Check {
 
     private final String name;
     private final String type;
-    private final String description;
     private final Category category;
-    private final int maxvl;
     private final boolean experimental;
+
+    private final String description;
+    private final int maxvl;
 
     private int vl;
 
-    protected Check(String name, String type) {
+    protected Check(String name, String type, Category category, boolean experimental) {
         this.name = name;
         this.type = type;
+        this.category = category;
+        this.experimental = experimental;
 
 
     }
 
-}
-enum Category {
-    COMBAT,
-    MOVEMENT,
-    PLAYER,
-    EXPLOIT
+    public abstract void process(PlayerData data);
 }

@@ -4,6 +4,12 @@ import com.github.retrooper.packetevents.protocol.player.User;
 
 import java.util.HashMap;
 
+
+/**
+ * @author 5170
+ * made on dev.isnow.foxac.data
+ */
+
 public class PlayerDataManager {
 
     private final HashMap<User, PlayerData> data = new HashMap<>();

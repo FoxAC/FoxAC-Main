@@ -1,7 +1,6 @@
 combat:
   aura:
     a:
-      description: "Detects if player is still sprinting after an entity interaction."
       maxvl: 5
       enabled: true
 movement:

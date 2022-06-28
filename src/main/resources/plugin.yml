@@ -1,4 +1,18 @@
-name: QuickAC
-version: '${project.version}'
-main: dev.isnow.quickac.QuickAC
-api-version: 1.19
+name: Fox
+version: '0.1'
+main: dev.isnow.foxac.FoxAC
+authors:
+  - "5170"
+  - "Lindgey"
+
+commands:
+  fox:
+    description: Commands for Fox Anticheat.
+    usage: /fox
+    aliases: [foxac, fac, foxanticheat]
+
+softdepend:
+  - ProtocolLib
+  - ProtocolSupport
+  - ViaVersion
+  - Geyser-Spigot

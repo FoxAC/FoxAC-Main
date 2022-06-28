@@ -1,0 +1,32 @@
+license-key: "FAC-AMOGUS-1337-6969"
+
+
+
+#──────────────────────────────────────────────────
+#─██████████████─██████████████─████████──████████─
+#─██░░░░░░░░░░██─██░░░░░░░░░░██─██░░░░██──██░░░░██─
+#─██░░██████████─██░░██████░░██─████░░██──██░░████─
+#─██░░██─────────██░░██──██░░██───██░░░░██░░░░██───
+#─██░░██████████─██░░██──██░░██───████░░░░░░████───
+#─██░░░░░░░░░░██─██░░██──██░░██─────██░░░░░░██─────
+#─██░░██████████─██░░██──██░░██───████░░░░░░████───
+#─██░░██─────────██░░██──██░░██───██░░░░██░░░░██───
+#─██░░██─────────██░░██████░░██─████░░██──██░░████─
+#─██░░██─────────██░░░░░░░░░░██─██░░░░██──██░░░░██─
+#─██████─────────██████████████─████████──████████─
+#──────────────────────────────────────────────────
+
+# ||| CHECKS ARE STORED AT checks.yml! ||| #
+# ||| CHECKS ARE STORED AT checks.yml! ||| #
+# ||| CHECKS ARE STORED AT checks.yml! ||| #
+# ||| CHECKS ARE STORED AT checks.yml! ||| #
+# ||| CHECKS ARE STORED AT checks.yml! ||| #
+# ||| CHECKS ARE STORED AT checks.yml! ||| #
+# ||| CHECKS ARE STORED AT checks.yml! ||| #
+
+# General Settings
+settings:
+  anti-vpn: true # Credits to funkemunky for his amazing anti-vpn api!
+  debug-mode: false # Disable banning, alerts auto-enabled on join.
+  client-blacklist: false # Kick players with blacklisted client names.
+  ghostblock-processor: true # Enables lag-backs while standing on a ghost block/being stuck inside an anvil.

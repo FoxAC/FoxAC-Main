@@ -11,6 +11,11 @@ import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPl
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.data.PlayerData;
 
+/**
+ * @author 5170
+ * made on dev.isnow.foxac.packet
+ */
+
 public class PacketProcessor extends SimplePacketListenerAbstract {
 
     public PacketProcessor() {
