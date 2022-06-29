@@ -58,20 +58,24 @@ public class ConnectionProcessor {
     public void handleWindowConfirmationRecieveing(WrapperPlayClientWindowConfirmation wrapper) {
         Transaction transaction = transactions.poll();
 
-        if (wrapper.getWindowId() == 0
-                && wrapper.getActionId() == transaction.id) {
-
-            if (transactionTasks.containsKey(transaction.id)) {
-                for (Runnable runnable : transactionTasks.removeAll(transaction.id)) {
-                    runnable.run();
-                }
+        if (wrapper.getWindowId() == 0) {
+            if(transaction == null) {
+                return; // Not our transaction?
             }
+            if (wrapper.getActionId() == transaction.id) {
 
-                /*
-                transaction ping would be more accurate as i know
-                 */
-            transactionPing = (int) (System.currentTimeMillis() - transaction.timestamp);
+                if (transactionTasks.containsKey(transaction.id)) {
+                    for (Runnable runnable : transactionTasks.removeAll(transaction.id)) {
+                        runnable.run();
+                    }
+                }
 
+            /*
+            transaction ping would be more accurate as I know
+             */
+                transactionPing = (int) (System.currentTimeMillis() - transaction.timestamp);
+
+            }
         }
 
     }

@@ -3,6 +3,7 @@ package dev.isnow.foxac.config;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.config.impl.Theme;
+import dev.isnow.foxac.util.MessageUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -85,13 +86,21 @@ public class Config {
     private void createAdditionalFiles() {
         File themeFile = new File(FoxAC.getInstance().getDataFolder(), "themes.yml");
         if (!themeFile.exists()) {
-            themeFile.getParentFile().mkdirs();
+            boolean successful = themeFile.getParentFile().mkdirs();
+            if(!successful) {
+                MessageUtils.sendConsoleMessage("Couldn't create a new directory called FoxAC.");
+                FoxAC.getInstance().getPluginLoader().disablePlugin(FoxAC.getInstance());
+            }
             FoxAC.getInstance().saveResource("themes.yml", false);
         }
 
         File checksFile = new File(FoxAC.getInstance().getDataFolder(), "checks.yml");
         if (!checksFile.exists()) {
-            checksFile.getParentFile().mkdirs();
+            boolean successful = checksFile.getParentFile().mkdirs();
+            if(!successful) {
+                MessageUtils.sendConsoleMessage("Couldn't create a new directory called FoxAC.");
+                FoxAC.getInstance().getPluginLoader().disablePlugin(FoxAC.getInstance());
+            }
             FoxAC.getInstance().saveResource("checks.yml", false);
         }
 

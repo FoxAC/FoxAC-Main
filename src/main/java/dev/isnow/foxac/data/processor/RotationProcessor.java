@@ -24,7 +24,6 @@ public class RotationProcessor {
     private float prevMouseX, prevMouseY, mouseX, mouseY;
     private double prevMouseMotionX, prevMouseMotionY, mouseMotionX, mouseMotionY,
             mouseGcdX, mouseGcdY, tickXSensitivity, tickYSensitivity, xSensitivity, ySensitivity;
-    ;
 
     private final List<Double> xSensitivitiesSamples = new ArrayList<>();
     private final List<Double> ySensitivitiesSamples = new ArrayList<>();

@@ -18,6 +18,6 @@ public class MessageUtils {
 
     public void sendConsoleMessage(String input) {
         Bukkit.getConsoleSender().sendMessage(color("&7------------------------"));
-        Bukkit.getConsoleSender().sendMessage(color("&c[FOXAC] &7- " + input));
+        Bukkit.getConsoleSender().sendMessage(color("&c[FoxAC] &7- " + input));
     }
 }
