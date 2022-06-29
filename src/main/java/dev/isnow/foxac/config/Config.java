@@ -1,8 +1,6 @@
 package dev.isnow.foxac.config;
 
 import dev.isnow.foxac.FoxAC;
-import dev.isnow.foxac.check.Category;
-import dev.isnow.foxac.check.Check;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.config.impl.Theme;
 import lombok.Getter;

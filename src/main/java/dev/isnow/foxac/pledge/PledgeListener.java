@@ -6,7 +6,6 @@ import dev.isnow.foxac.data.PlayerData;
 import dev.isnow.foxac.data.processor.ConnectionProcessor;
 import dev.thomazz.pledge.api.event.TransactionEvent;
 import dev.thomazz.pledge.api.event.TransactionListener;
-import org.bukkit.entity.Player;
 
 /**
  * @author Lindgey
