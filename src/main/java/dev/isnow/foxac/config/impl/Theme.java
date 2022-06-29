@@ -1,4 +1,4 @@
-package dev.isnow.foxac.config;
+package dev.isnow.foxac.config.impl;
 
 import lombok.AllArgsConstructor;
 

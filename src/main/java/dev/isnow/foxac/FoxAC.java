@@ -3,6 +3,7 @@ package dev.isnow.foxac;
 import com.github.retrooper.packetevents.PacketEvents;
 import dev.isnow.foxac.data.PlayerDataManager;
 import dev.isnow.foxac.packet.PacketProcessor;
+import dev.isnow.foxac.pledge.PledgeLoader;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +32,8 @@ public final class FoxAC extends JavaPlugin {
 
         PacketEvents.getAPI().getEventManager().registerListener(new PacketProcessor());
         PacketEvents.getAPI().init();
+
+        new PledgeLoader().load(this);
 
     }
 

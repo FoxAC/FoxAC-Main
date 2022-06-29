@@ -1,14 +1,18 @@
 package dev.isnow.foxac.config;
 
 import dev.isnow.foxac.FoxAC;
+import dev.isnow.foxac.check.Category;
+import dev.isnow.foxac.check.Check;
+import dev.isnow.foxac.config.impl.CheckInConfig;
+import dev.isnow.foxac.config.impl.Theme;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * @author 5170
@@ -26,6 +30,8 @@ public class Config {
     private final HashMap<String, Theme> themes = new HashMap<>();
     private final String currentTheme;
 
+    private final HashMap<String, CheckInConfig> checks = new HashMap<>();
+
     public Config() {
         FileConfiguration config = FoxAC.getInstance().getConfig();
 
@@ -40,7 +46,7 @@ public class Config {
         clientBlacklist = config.getBoolean("settings.client-blacklist");
         ghostBlockProcessor = config.getBoolean("settings.ghostblock-processor");
 
-        currentTheme = config.getString("current-theme");
+        currentTheme = config.getString("current-theme").toLowerCase(Locale.ROOT);
 
         for(String themeName : themesConfig.getConfigurationSection("themes").getKeys(false)) {
             String staticString = "themes." + themeName + ".";
@@ -61,6 +67,20 @@ public class Config {
             Bukkit.getConsoleSender().sendMessage("Theme " + themeName + " loaded!");
         }
 
+        for(String checkCategory : checksConfig.getKeys(false)) {
+            for(String checkType : checksConfig.getConfigurationSection(checkCategory).getKeys(false)) {
+                for(String check : checksConfig.getConfigurationSection(checkCategory + "." + checkType).getKeys(false)) {
+                    String staticString = checkCategory + "." + checkType + "." + checks + ".";
+                    String checkFullName = checkType + check.toUpperCase(Locale.ROOT);
+                    Boolean enabled = checksConfig.getBoolean(staticString + "enabled");
+                    checks.put(checkFullName, new CheckInConfig(
+                            checksConfig.getString(staticString + "description"),
+                            checksConfig.getInt(staticString + "maxvl"),
+                            enabled));
+                    Bukkit.getConsoleSender().sendMessage("Check " + checkFullName + " loaded! Enabled: " + enabled);
+                }
+            }
+        }
     }
 
     private void createAdditionalFiles() {

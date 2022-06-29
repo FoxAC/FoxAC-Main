@@ -36,6 +36,7 @@ public class ConnectionProcessor {
     private int keepAlivePing, transactionPing;
     private long lastKeepAliveSent;
 
+
     public void onTransaction(TransactionEvent event, TransactionType type) {
         switch (type) {
             case SEND_START:
@@ -46,52 +47,42 @@ public class ConnectionProcessor {
         }
     }
 
-    public void process(PacketPlaySendEvent event) {
-        if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
-            WrapperPlayServerWindowConfirmation wrapper = new WrapperPlayServerWindowConfirmation(event);
-
-            if (wrapper.getWindowId() == 0 && !wrapper.isAccepted()) {
-                transactions.add(new Transaction(wrapper.getActionId(), System.currentTimeMillis()));
-            }
-        } else if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
-            WrapperPlayServerKeepAlive wrapper = new WrapperPlayServerKeepAlive(event);
-
-            this.lastKeepAliveSent = System.currentTimeMillis();
-
-            keepAlives.add(wrapper.getId());
+    public void handleWindowConfirmationSending(WrapperPlayServerWindowConfirmation wrapper) {
+        if (wrapper.getWindowId() == 0 && !wrapper.isAccepted()) {
+            transactions.add(new Transaction(wrapper.getActionId(), System.currentTimeMillis()));
         }
     }
 
+    public void handleKeepAliveSending(WrapperPlayServerKeepAlive wrapper) {
+        this.lastKeepAliveSent = System.currentTimeMillis();
 
-    public void process(PacketPlayReceiveEvent event) {
-        if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
-            WrapperPlayClientWindowConfirmation wrapper = new WrapperPlayClientWindowConfirmation(event);
+        keepAlives.add(wrapper.getId());
+    }
 
-            Transaction transaction = transactions.poll();
 
-            if (wrapper.getWindowId() == 0
-                    && wrapper.getActionId() == transaction.id) {
+    public void handleWindowConfirmationRecieveing(WrapperPlayClientWindowConfirmation wrapper) {
+        Transaction transaction = transactions.poll();
 
-                if (transactionTasks.containsKey(transaction.id)) {
-                    for (Runnable runnable : transactionTasks.removeAll(transaction.id)) {
-                        runnable.run();
-                    }
+        if (wrapper.getWindowId() == 0
+                && wrapper.getActionId() == transaction.id) {
+
+            if (transactionTasks.containsKey(transaction.id)) {
+                for (Runnable runnable : transactionTasks.removeAll(transaction.id)) {
+                    runnable.run();
                 }
+            }
 
                 /*
                 transaction ping would be more accurate as i know
                  */
-                transactionPing = (int) (System.currentTimeMillis() - transaction.timestamp);
-
-            }
-
-
-
-        } else if (event.getPacketType() == PacketType.Play.Client.KEEP_ALIVE) {
-            this.keepAlivePing = (int) (System.currentTimeMillis() - lastKeepAliveSent);
-
+            transactionPing = (int) (System.currentTimeMillis() - transaction.timestamp);
 
         }
+
+    }
+
+    public void handleKeepAliveRecieveing() {
+        keepAlivePing = (int) (System.currentTimeMillis() - lastKeepAliveSent);
     }
 
     private short nextIndex() {
@@ -120,7 +111,7 @@ public class ConnectionProcessor {
     }
 
     @RequiredArgsConstructor
-    public class Transaction {
+    public static class Transaction {
         public final short id;
         public final long timestamp;
     }
