@@ -1,6 +1,9 @@
 name: Fox
 version: '0.1'
+
 main: dev.isnow.foxac.FoxAC
+load: STARTUP
+
 authors:
   - "5170"
   - "Lindgey"

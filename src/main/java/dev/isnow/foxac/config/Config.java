@@ -33,6 +33,7 @@ public class Config {
     private final HashMap<String, CheckInConfig> checks = new HashMap<>();
 
     public Config() {
+        FoxAC.getInstance().saveDefaultConfig();
         FileConfiguration config = FoxAC.getInstance().getConfig();
 
         createAdditionalFiles();
