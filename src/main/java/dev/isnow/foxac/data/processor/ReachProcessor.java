@@ -22,6 +22,7 @@ import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Lindgey
@@ -39,16 +40,15 @@ public class ReachProcessor {
 
     private final List<EData> tracked = new ArrayList<>();
 
-    public void process(PacketPlayReceiveEvent event) {
-        if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
-            WrapperPlayClientInteractEntity packet = new WrapperPlayClientInteractEntity(event);
-            if (packet.getAction() == WrapperPlayClientInteractEntity.InteractAction.ATTACK) {
-                attack = true;
-                lastHitId = packet.getEntityId();
-            }
-        } else if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
+    public void handleInteractEntity(WrapperPlayClientInteractEntity wrapper) {
+        if (wrapper.getAction() == WrapperPlayClientInteractEntity.InteractAction.ATTACK) {
+            attack = true;
+            lastHitId = wrapper.getEntityId();
+        }
+    }
 
-
+    public void handleFlying(WrapperPlayClientPlayerFlying wrapper) {
+        if(!wrapper.hasPositionChanged() && !wrapper.hasRotationChanged()) {
             if (attack) {
                 attack = false;
 
@@ -59,10 +59,7 @@ public class ReachProcessor {
             }
 
             tracked.forEach(EData::interpolate);
-
-
         }
-
     }
 
     private double getReach(int id) {
@@ -147,7 +144,7 @@ public class ReachProcessor {
     }
 
     private EData getById(int id) {
-        return tracked.stream().filter(eData -> eData.getId() == id).findAny().get();
+        return tracked.stream().filter(eData -> eData.getId() == id).findAny().orElseGet(() -> new EData(0, null));
     }
 
 

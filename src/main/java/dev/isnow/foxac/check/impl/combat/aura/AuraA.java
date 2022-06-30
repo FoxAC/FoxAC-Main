@@ -17,6 +17,8 @@ public class AuraA extends Check {
 
     @Override
     public void process(PlayerData data) {
-
+        if(data.getActionProcessor().isAttacking() && data.getActionProcessor().isSprinting()) {
+            fail();
+        }
     }
 }

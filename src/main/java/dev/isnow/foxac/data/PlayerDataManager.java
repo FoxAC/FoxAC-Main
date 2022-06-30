@@ -1,6 +1,7 @@
 package dev.isnow.foxac.data;
 
 import com.github.retrooper.packetevents.protocol.player.User;
+import dev.isnow.foxac.FoxAC;
 
 import java.util.HashMap;
 
@@ -18,7 +19,9 @@ public class PlayerDataManager {
         return data.get(user);
     }
 
-    public void createData(User user) {
+    public void initUser(User user) {
         data.put(user, new PlayerData(user));
+
+        FoxAC.getInstance().getCheckManager().loadChecks(data.get(user));
     }
 }

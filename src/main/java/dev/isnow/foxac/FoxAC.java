@@ -1,6 +1,7 @@
 package dev.isnow.foxac;
 
 import com.github.retrooper.packetevents.PacketEvents;
+import dev.isnow.foxac.check.CheckManager;
 import dev.isnow.foxac.config.Config;
 import dev.isnow.foxac.data.PlayerDataManager;
 import dev.isnow.foxac.packet.PacketProcessor;
@@ -16,13 +17,23 @@ public final class FoxAC extends JavaPlugin {
     private static FoxAC instance;
     @Getter
     private final PlayerDataManager dataManager = new PlayerDataManager();
+
+    @Getter
+    private final CheckManager checkManager = new CheckManager();
     @Getter
     private Config configuration;
 
     @Override
     public void onLoad() {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
 
+        PacketEvents.getAPI().getSettings()
+                .checkForUpdates(false)
+                .bStats(false)
+                .debug(false);
+        PacketEvents.getAPI().load();
     }
+
     @Override
     public void onEnable() {
         instance = this;

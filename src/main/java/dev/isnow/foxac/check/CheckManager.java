@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.protocol.player.User;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.check.impl.combat.aura.AuraA;
 import dev.isnow.foxac.config.impl.CheckInConfig;
+import dev.isnow.foxac.data.PlayerData;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -24,11 +25,12 @@ public class CheckManager {
 
     }
 
-    public void loadChecks(User user) {
+    public void loadChecks(PlayerData data) {
         for(Check check : getExistingChecks) {
             CheckInConfig checkInConfig = FoxAC.getInstance().getConfiguration().getChecks().get(check.getName() + check.getType());
             if(checkInConfig.getEnabled()) {
-                FoxAC.getInstance().getDataManager().getData(user).getLoadedChecks().add(check);
+                check.setData(data);
+                data.getLoadedChecks().add(check);
             }
         }
     }
