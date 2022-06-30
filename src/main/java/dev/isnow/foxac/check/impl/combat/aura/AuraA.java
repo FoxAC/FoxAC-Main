@@ -11,8 +11,8 @@ import dev.isnow.foxac.data.PlayerData;
 
 public class AuraA extends Check {
 
-    protected AuraA() {
-        super("Aura", "A", Category.COMBAT, true);
+    public AuraA() {
+        super("Aura", "A", true);
     }
 
     @Override

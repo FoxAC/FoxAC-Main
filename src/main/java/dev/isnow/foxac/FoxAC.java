@@ -15,7 +15,7 @@ public final class FoxAC extends JavaPlugin {
     @Getter
     private static FoxAC instance;
     @Getter
-    private final PlayerDataManager manager = new PlayerDataManager();
+    private final PlayerDataManager dataManager = new PlayerDataManager();
     @Getter
     private Config configuration;
 
@@ -47,6 +47,7 @@ public final class FoxAC extends JavaPlugin {
         MessageUtils.sendConsoleMessage("|__/      \\______/ |__/  |__/      |__/  |__/|__/  \\__/   |__/   |______/ \\______/ |__/  |__/|________/|__/  |__/   |__/   ");
         MessageUtils.sendConsoleMessage("Loading config...");
         configuration = new Config();
+
         MessageUtils.sendConsoleMessage("Checking license...");
         // LicenseUtils.checkLicense();
 

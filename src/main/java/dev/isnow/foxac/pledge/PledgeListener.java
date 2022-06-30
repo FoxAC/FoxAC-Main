@@ -16,7 +16,7 @@ public class PledgeListener implements TransactionListener {
     @Override
     public void onSendStart(TransactionEvent event) {
 
-        PlayerData data = FoxAC.getInstance().getManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
+        PlayerData data = FoxAC.getInstance().getDataManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
 
         if (data == null) return;
 
@@ -26,7 +26,7 @@ public class PledgeListener implements TransactionListener {
     @Override
     public void onSendEnd(TransactionEvent event) {
 
-        PlayerData data = FoxAC.getInstance().getManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
+        PlayerData data = FoxAC.getInstance().getDataManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
 
         if (data == null) return;
 
@@ -36,7 +36,7 @@ public class PledgeListener implements TransactionListener {
     @Override
     public void onReceiveStart(TransactionEvent event) {
 
-        PlayerData data = FoxAC.getInstance().getManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
+        PlayerData data = FoxAC.getInstance().getDataManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
 
         if (data == null) return;
 
@@ -46,7 +46,7 @@ public class PledgeListener implements TransactionListener {
     @Override
     public void onReceiveEnd(TransactionEvent event) {
 
-        PlayerData data = FoxAC.getInstance().getManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
+        PlayerData data = FoxAC.getInstance().getDataManager().getData(PacketEvents.getAPI().getPlayerManager().getUser(event.getInfo().getPlayer()));
 
         if (data == null) return;
 
