@@ -65,7 +65,7 @@ public class RotationProcessor {
         } else {
 
             /*
-             * if rotation haven't changed, we'll just assume player haven't rotated in the last tick.
+             * if rotation haven't changed, we'll just assume player didn't rotate in the last tick.
              * this also prevents rotation values to be inaccurate.
              */
 

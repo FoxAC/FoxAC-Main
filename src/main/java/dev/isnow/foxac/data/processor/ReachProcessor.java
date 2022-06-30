@@ -18,9 +18,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Lindgey
@@ -46,7 +49,7 @@ public class ReachProcessor {
     }
 
     public void handleFlying(WrapperPlayClientPlayerFlying wrapper) {
-        if(!wrapper.hasPositionChanged() && !wrapper.hasRotationChanged()) {
+        if (!wrapper.hasPositionChanged() && !wrapper.hasRotationChanged()) {
             if (attack) {
                 attack = false;
 
@@ -142,7 +145,28 @@ public class ReachProcessor {
     }
 
     private EData getById(int id) {
-        return tracked.stream().filter(eData -> eData.getId() == id).findAny().orElseGet(() -> new EData(0, null));
+        Optional<EData> eDataOptional = tracked.stream().filter(eData -> eData.id == id).findAny();
+        
+        if (!eDataOptional.isPresent()) {
+            Vector3d pos = new Vector3d(data.getPositionProcessor().getX(), data.getPositionProcessor().
+                    getY(), data.getPositionProcessor().getZ());
+
+            for (World world : Bukkit.getWorlds()) {
+                for (Entity entities : world.getEntities()) {
+                    if (entities.getEntityId() == id)
+                        pos = new Vector3d(entities.getLocation().getX(), entities.getLocation().getY(), entities.getLocation().getZ());
+
+                }
+
+            }
+
+            tracked.add(new EData(id, pos));
+
+        }
+
+        return eDataOptional.get();
+
+
     }
 
 
