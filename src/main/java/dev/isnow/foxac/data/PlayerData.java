@@ -6,6 +6,8 @@ import dev.isnow.foxac.check.CheckManager;
 import dev.isnow.foxac.data.processor.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
@@ -25,7 +27,13 @@ public class PlayerData {
     private final ConnectionProcessor connectionProcessor = new ConnectionProcessor(this);
     private final ActionProcessor actionProcessor = new ActionProcessor(this);
     private final ReachProcessor reachProcessor = new ReachProcessor(this);
+    private final StatusProcessor statusProcessor = new StatusProcessor(this);
+    private final VelocityProcessor velocityProcessor = new VelocityProcessor(this);
 
     private CheckManager checkManager = new CheckManager(this);
+
+    public Player getPlayer() {
+        return Bukkit.getPlayer(player.getUUID());
+    }
 
 }

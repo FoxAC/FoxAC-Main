@@ -8,7 +8,9 @@ import com.github.retrooper.packetevents.event.simple.PacketPlaySendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.wrapper.play.client.*;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityVelocity;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerKeepAlive;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerAbilities;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.check.Check;
@@ -44,6 +46,7 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
             data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
             data.getReachProcessor().handleFlying();
             data.getActionProcessor().handleFlying();
+            data.getVelocityProcessor().handleFlying();
         }
 
         if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
@@ -74,6 +77,7 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
             data.getConnectionProcessor().handleKeepAliveRecieveing();
         }
 
+
         for (Check check : data.getCheckManager().getLoadedChecks()) {
             check.handleCheck(new FPacketEvent(event));
 
@@ -93,6 +97,14 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
             data.getConnectionProcessor().handleKeepAliveSending(new WrapperPlayServerKeepAlive(event));
+        }
+
+        if(event.getPacketType() == PacketType.Play.Server.ENTITY_VELOCITY) {
+            data.getVelocityProcessor().handleVelocity(new WrapperPlayServerEntityVelocity(event));
+        }
+
+        if(event.getPacketType() == PacketType.Play.Server.PLAYER_ABILITIES) {
+            data.getStatusProcessor().handleAbilities(new WrapperPlayServerPlayerAbilities(event));
         }
 
         for (Check check : data.getCheckManager().getLoadedChecks()) {
