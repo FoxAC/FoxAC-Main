@@ -1,6 +1,5 @@
 package dev.isnow.foxac.check;
 
-import com.github.retrooper.packetevents.protocol.player.User;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.check.impl.combat.aura.AuraA;
 import dev.isnow.foxac.config.impl.CheckInConfig;

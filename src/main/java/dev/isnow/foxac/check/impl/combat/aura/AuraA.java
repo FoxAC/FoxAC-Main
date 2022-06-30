@@ -1,6 +1,5 @@
 package dev.isnow.foxac.check.impl.combat.aura;
 
-import dev.isnow.foxac.check.Category;
 import dev.isnow.foxac.check.Check;
 import dev.isnow.foxac.data.PlayerData;
 

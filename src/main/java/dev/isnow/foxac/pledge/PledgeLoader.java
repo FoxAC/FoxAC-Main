@@ -1,7 +1,6 @@
 package dev.isnow.foxac.pledge;
 
 import dev.isnow.foxac.FoxAC;
-import dev.thomazz.pledge.api.Direction;
 import dev.thomazz.pledge.api.Pledge;
 import lombok.Getter;
 
