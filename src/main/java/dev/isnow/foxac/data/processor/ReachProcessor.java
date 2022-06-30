@@ -49,11 +49,12 @@ public class ReachProcessor {
         } else if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
 
 
-            if(attack) {
+            if (attack) {
                 attack = false;
 
-                reach = getReach(lastHitId);
-                Bukkit.broadcastMessage("reach=" + reach);
+                reach = getReach(lastHitId) - 0.15;
+                if (reach < 7.5)
+                    Bukkit.broadcastMessage("reach=" + reach);
 
             }
 
@@ -126,13 +127,12 @@ public class ReachProcessor {
 
             tracked.add(new EData(packet.getEntityId(), packet.getPosition()));
 
-        } else if(event.getPacketType() == PacketType.Play.Server.SPAWN_LIVING_ENTITY) {
+        } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_LIVING_ENTITY) {
             final WrapperPlayServerSpawnPlayer packet = new WrapperPlayServerSpawnPlayer(event);
 
             tracked.add(new EData(packet.getEntityId(), packet.getPosition()));
 
-        }
-        else if (event.getPacketType() == PacketType.Play.Server.ENTITY_RELATIVE_MOVE) {
+        } else if (event.getPacketType() == PacketType.Play.Server.ENTITY_RELATIVE_MOVE) {
             final WrapperPlayServerEntityRelativeMove packet = new WrapperPlayServerEntityRelativeMove(event);
             getById(packet.getEntityId()).processRelMove(new Vector3d(packet.getDeltaX(), packet.getDeltaY(), packet.getDeltaZ()));
 
@@ -175,7 +175,6 @@ public class ReachProcessor {
             second = first.add(move);
 
 
-
         }
 
         public void processTeleport(Vector3d pos) {
@@ -187,7 +186,15 @@ public class ReachProcessor {
             data.getConnectionProcessor().addPreTask(() -> steps = 3);
 
             //TODO PUT THIS ON POST TRANSACTION
-            second = pos;
+
+            double deltaX = first.x - pos.x;
+            double deltaY = first.y - pos.y;
+            double deltaZ = first.z - pos.z;
+
+            if (Math.abs(deltaX) < 0.03125D && Math.abs(deltaY) < 0.015625D && Math.abs(deltaZ) < 0.03125D)
+                second = first;
+            else
+                second = pos;
 
 
         }
