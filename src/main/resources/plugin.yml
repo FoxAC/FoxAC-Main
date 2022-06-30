@@ -2,7 +2,7 @@ name: Fox
 version: '0.1'
 
 main: dev.isnow.foxac.FoxAC
-load: STARTUP
+load: POSTWORLD
 
 authors:
   - "5170"

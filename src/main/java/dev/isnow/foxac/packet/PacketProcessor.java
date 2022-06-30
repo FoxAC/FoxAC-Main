@@ -38,7 +38,7 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if (data == null) return;
 
-        if (event.getPacketType() == PacketType.Play.Client.PLAYER_FLYING) {
+        if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             data.getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
             data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
         }
@@ -50,6 +50,8 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
         if (event.getPacketType() == PacketType.Play.Client.KEEP_ALIVE) {
             data.getConnectionProcessor().handleKeepAliveRecieveing();
         }
+
+        data.getReachProcessor().process(event);
     }
 
     @Override
@@ -65,6 +67,8 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
         if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
             data.getConnectionProcessor().handleKeepAliveSending(new WrapperPlayServerKeepAlive(event));
         }
+
+        data.getReachProcessor().process(event);
 
     }
 }

@@ -21,6 +21,12 @@ public final class FoxAC extends JavaPlugin {
 
     @Override
     public void onLoad() {
+
+    }
+    @Override
+    public void onEnable() {
+        instance = this;
+
         PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
 
         PacketEvents.getAPI().getSettings()
@@ -28,10 +34,6 @@ public final class FoxAC extends JavaPlugin {
                 .bStats(false)
                 .debug(false);
         PacketEvents.getAPI().load();
-    }
-    @Override
-    public void onEnable() {
-        instance = this;
 
         long start = System.currentTimeMillis();
 

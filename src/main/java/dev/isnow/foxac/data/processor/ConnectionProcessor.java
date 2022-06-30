@@ -9,6 +9,7 @@ import dev.isnow.foxac.data.PlayerData;
 import dev.thomazz.pledge.api.event.TransactionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -100,6 +101,7 @@ public class ConnectionProcessor {
 
     public void addPostTask(Runnable runnable) {
         transactionTasks.put(nextIndex(), runnable);
+        Bukkit.broadcastMessage("ass1");
     }
 
     public enum TransactionType {

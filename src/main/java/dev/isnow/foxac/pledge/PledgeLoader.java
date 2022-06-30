@@ -17,9 +17,6 @@ public class PledgeLoader {
 
     public void load(FoxAC plugin) {
 
-        pledgeInst.range(0, 32767);
-        pledgeInst.direction(Direction.POSITIVE);
-
         pledgeInst.start(plugin);
         pledgeInst.addListener(new PledgeListener());
 

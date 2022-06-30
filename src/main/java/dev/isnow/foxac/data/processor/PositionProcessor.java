@@ -1,6 +1,7 @@
 package dev.isnow.foxac.data.processor;
 
 import com.github.retrooper.packetevents.protocol.world.Location;
+import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import dev.isnow.foxac.data.PlayerData;
 import lombok.Getter;
@@ -24,10 +25,12 @@ public class PositionProcessor {
 
     private Location currentLocation, lastLocation;
 
+    private double x,y,z, lastX, lastY, lastZ;
     private double motionX, motionY, motionZ, motionXZ;
     private double lastMotionX, lastMotionY, lastMotionZ, lastMotionXZ;
 
     public void handlePosition(WrapperPlayClientPlayerFlying flying) {
+
         lastClientOnGround = clientOnGround;
         lastClientInAir = clientInAir;
 
@@ -40,22 +43,32 @@ public class PositionProcessor {
             clientAirTicks++;
         }
 
+        lastMotionX = motionX;
+        lastMotionY = motionY;
+        lastMotionZ = motionZ;
+        lastMotionXZ = motionXZ;
+
+        lastX = x;
+        lastY = y;
+        lastZ = z;
+
         if (flying.hasPositionChanged()) {
-            if (currentLocation != null) { // Prevent NPE
-                lastLocation = currentLocation;
-            }
-            lastMotionX = motionX;
-            lastMotionY = motionY;
-            lastMotionZ = motionZ;
-            lastMotionXZ = motionXZ;
 
-            currentLocation = flying.getLocation();
+            Location flyingLoc = flying.getLocation();
 
-            motionX = currentLocation.getX() - lastLocation.getX();
-            motionY = currentLocation.getY() - lastLocation.getY();
-            motionZ = currentLocation.getZ() - lastLocation.getZ();
+            x = flyingLoc.getX();
+            y = flyingLoc.getY();
+            z = flyingLoc.getZ();
 
-            motionXZ = Math.hypot(motionX, motionZ);
+            motionX = x - lastX;
+            motionY = y = lastY;
+            motionZ = z - lastZ;
+
+            //faster than java's Math.hypot
+            motionXZ = Math.sqrt((motionX * motionX) + (motionZ * motionZ));
+
+            lastLocation = currentLocation != null ? currentLocation : new Location(new Vector3d(lastX, lastY, lastZ), 0, 0);
+            currentLocation = flyingLoc;
 
         }
     }
