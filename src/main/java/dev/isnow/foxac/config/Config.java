@@ -1,6 +1,7 @@
 package dev.isnow.foxac.config;
 
 import dev.isnow.foxac.FoxAC;
+import dev.isnow.foxac.check.Category;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.config.impl.Theme;
 import dev.isnow.foxac.util.MessageUtils;
@@ -74,6 +75,7 @@ public class Config {
                     String checkFullName = checkType + check.toUpperCase(Locale.ROOT);
                     Boolean enabled = checksConfig.getBoolean(staticString + "enabled");
                     checks.put(checkFullName, new CheckInConfig(
+                            Category.valueOf(checkCategory.toUpperCase(Locale.ROOT)),
                             checksConfig.getString(staticString + "description"),
                             checksConfig.getInt(staticString + "maxvl"),
                             enabled));
