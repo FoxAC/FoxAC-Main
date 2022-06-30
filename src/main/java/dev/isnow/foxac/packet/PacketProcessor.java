@@ -13,6 +13,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWi
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.check.Check;
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.packet.event.FPacketEvent;
 
 /**
  * @author 5170
@@ -41,27 +42,27 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             data.getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
             data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
-            data.getReachProcessor().handleFlying(new WrapperPlayClientPlayerFlying(event));
+            data.getReachProcessor().handleFlying();
             data.getActionProcessor().handleFlying();
         }
 
-        if(event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
+        if (event.getPacketType() == PacketType.Play.Client.INTERACT_ENTITY) {
             data.getReachProcessor().handleInteractEntity(new WrapperPlayClientInteractEntity(event));
         }
 
-        if(event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
+        if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
             data.getActionProcessor().handleEntityAction(new WrapperPlayClientEntityAction(event));
         }
 
-        if(event.getPacketType() == PacketType.Play.Client.PLAYER_BLOCK_PLACEMENT) {
+        if (event.getPacketType() == PacketType.Play.Client.PLAYER_BLOCK_PLACEMENT) {
             data.getActionProcessor().handleBlockPlace(new WrapperPlayClientPlayerBlockPlacement(event));
         }
 
-        if(event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
+        if (event.getPacketType() == PacketType.Play.Client.PLAYER_DIGGING) {
             data.getActionProcessor().handleDigging(new WrapperPlayClientPlayerDigging(event));
         }
 
-        if(event.getPacketType() == PacketType.Play.Client.USE_ITEM) {
+        if (event.getPacketType() == PacketType.Play.Client.USE_ITEM) {
             data.getActionProcessor().handleUseItem(new WrapperPlayClientUseItem(event));
         }
 
@@ -73,8 +74,10 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
             data.getConnectionProcessor().handleKeepAliveRecieveing();
         }
 
-        for(Check check : data.getLoadedChecks()) {
-            check.process(data);
+        for (Check check : data.getCheckManager().getLoadedChecks()) {
+            check.handleCheck(new FPacketEvent(event));
+
+
         }
     }
 
@@ -90,6 +93,10 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
             data.getConnectionProcessor().handleKeepAliveSending(new WrapperPlayServerKeepAlive(event));
+        }
+
+        for (Check check : data.getCheckManager().getLoadedChecks()) {
+            check.handleCheck(new FPacketEvent(event));
         }
 
         data.getReachProcessor().process(event);

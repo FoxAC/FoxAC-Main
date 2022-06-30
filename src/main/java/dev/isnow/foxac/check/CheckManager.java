@@ -1,12 +1,12 @@
 package dev.isnow.foxac.check;
 
 import dev.isnow.foxac.FoxAC;
-import dev.isnow.foxac.check.impl.combat.aura.AuraA;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.data.PlayerData;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 5170
@@ -16,21 +16,28 @@ import java.util.ArrayList;
 @Getter
 public class CheckManager {
 
-    public final ArrayList<Check> getExistingChecks = new ArrayList<>();
+    private PlayerData data;
+    private final ArrayList<Check> loadedChecks = new ArrayList<>();
 
     // Not using reflections because of the obfuscation at release.
-    public CheckManager() {
-        getExistingChecks.add(new AuraA());
+    public CheckManager(PlayerData data) {
+        this.data = data;
+        loadChecks();
 
     }
 
-    public void loadChecks(PlayerData data) {
-        for(Check check : getExistingChecks) {
+    public void loadChecks() {
+
+        List<Check> checks = new ArrayList<>();
+
+        for (Check check : checks) {
             CheckInConfig checkInConfig = FoxAC.getInstance().getConfiguration().getChecks().get(check.getName() + check.getType());
-            if(checkInConfig.getEnabled()) {
-                check.setData(data);
-                data.getLoadedChecks().add(check);
+            if (checkInConfig.getEnabled()) {
+                loadedChecks.add(check);
+
             }
         }
+
+
     }
 }

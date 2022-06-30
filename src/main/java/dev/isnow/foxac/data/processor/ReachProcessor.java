@@ -48,25 +48,25 @@ public class ReachProcessor {
         }
     }
 
-    public void handleFlying(WrapperPlayClientPlayerFlying wrapper) {
-        if (!wrapper.hasPositionChanged() && !wrapper.hasRotationChanged()) {
-            if (attack) {
-                attack = false;
+    public void handleFlying() {
 
-                reach = getReach(lastHitId) - 0.15;
-                if (reach < 7.5)
-                    Bukkit.broadcastMessage("reach=" + reach);
+        if (attack) {
+            attack = false;
 
-            }
+            reach = getReach(lastHitId) - 0.15;
+            if (reach < 7.5)
+                Bukkit.broadcastMessage("reach=" + reach);
 
-            tracked.forEach(EData::interpolate);
         }
+
+        tracked.forEach(EData::interpolate);
+
     }
 
     private double getReach(int id) {
 
         /*
-         *  Doing this because these things can be different due to pvp clients, +1.9 clients etc..
+         *  doing this because these things can be different due to pvp clients, +1.9 clients etc..
          */
 
         Vec3[] origins = {
@@ -146,7 +146,7 @@ public class ReachProcessor {
 
     private EData getById(int id) {
         Optional<EData> eDataOptional = tracked.stream().filter(eData -> eData.id == id).findAny();
-        
+
         if (!eDataOptional.isPresent()) {
             Vector3d pos = new Vector3d(data.getPositionProcessor().getX(), data.getPositionProcessor().
                     getY(), data.getPositionProcessor().getZ());
@@ -184,7 +184,7 @@ public class ReachProcessor {
 
         public void processRelMove(Vector3d move) {
             /*
-            Confirm the next position using a post transaction
+            confirm the next position using a post transaction
              */
 
             //TODO PUT THIS ON PRE TRANSACTION
@@ -198,7 +198,7 @@ public class ReachProcessor {
 
         public void processTeleport(Vector3d pos) {
             /*
-            Confirm the next position using a post transaction
+            confirm the next position using a post transaction
              */
 
             //TODO PUT THIS ON PRE TRANSACTION
@@ -219,7 +219,7 @@ public class ReachProcessor {
         }
 
         /*
-        Moves the entity in 3 steps as the client does
+        moves the entity in 3 steps as the client does
          */
         public void interpolate() {
             if (steps > 0) {

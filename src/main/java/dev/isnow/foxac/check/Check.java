@@ -1,8 +1,13 @@
 package dev.isnow.foxac.check;
 
+import com.github.retrooper.packetevents.event.simple.PacketPlayReceiveEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.PacketWrapper;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkDataBulk;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.packet.event.FPacketEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -17,8 +22,8 @@ import java.util.Locale;
 @Getter
 public abstract class Check {
 
-    @Setter
-    private PlayerData data;
+
+    protected final PlayerData data;
 
     private final String name, type, description;
     private final Category category;
@@ -27,10 +32,11 @@ public abstract class Check {
 
     private int vl;
 
-    public Check(String name, String type, boolean experimental) {
+    public Check(String name, String type, boolean experimental, PlayerData data) {
 
         this.name = name;
         this.type = type;
+        this.data = data;
 
         CheckInConfig checkInConfig = FoxAC.getInstance().getConfiguration().getChecks().get(name + type);
         this.category = checkInConfig.getCategory();
@@ -40,7 +46,8 @@ public abstract class Check {
 
     }
 
-    public abstract void process(PlayerData data);
+    public abstract void handleCheck(FPacketEvent packetEvent);
+
     public void fail() {
         if (data == null) {
             return; // WTF?

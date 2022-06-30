@@ -19,8 +19,6 @@ public final class FoxAC extends JavaPlugin {
     private final PlayerDataManager dataManager = new PlayerDataManager();
 
     @Getter
-    private final CheckManager checkManager = new CheckManager();
-    @Getter
     private Config configuration;
 
     @Override
@@ -69,6 +67,8 @@ public final class FoxAC extends JavaPlugin {
         PacketEvents.getAPI().init();
 
         new PledgeLoader().load(this);
+
+
 
         MessageUtils.sendConsoleMessage("Loaded in " + (System.currentTimeMillis() - start) / 1000 + " seconds!");
     }

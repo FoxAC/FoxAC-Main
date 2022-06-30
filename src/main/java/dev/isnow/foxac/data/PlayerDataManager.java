@@ -22,6 +22,5 @@ public class PlayerDataManager {
     public void initUser(User user) {
         data.put(user, new PlayerData(user));
 
-        FoxAC.getInstance().getCheckManager().loadChecks(data.get(user));
     }
 }
