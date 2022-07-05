@@ -71,14 +71,15 @@ public class Config {
         for(String checkCategory : checksConfig.getKeys(false)) {
             for(String checkType : checksConfig.getConfigurationSection(checkCategory).getKeys(false)) {
                 for(String check : checksConfig.getConfigurationSection(checkCategory + "." + checkType).getKeys(false)) {
-                    String staticString = checkCategory + "." + checkType + "." + checks + ".";
-                    String checkFullName = checkType + check.toUpperCase(Locale.ROOT);
-                    Boolean enabled = checksConfig.getBoolean(staticString + "enabled");
+                    String staticString = checkCategory + "." + checkType + "." + check + ".";
+                    String checkFullName = checkType.toLowerCase(Locale.ROOT) + check.toLowerCase(Locale.ROOT);
+                    boolean enabled = checksConfig.getBoolean(staticString + "enabled");
                     checks.put(checkFullName, new CheckInConfig(
                             Category.valueOf(checkCategory.toUpperCase(Locale.ROOT)),
                             checksConfig.getString(staticString + "description"),
                             checksConfig.getInt(staticString + "maxvl"),
                             enabled));
+
                     Bukkit.getConsoleSender().sendMessage("Check " + checkFullName + " loaded! Enabled: " + enabled);
                 }
             }
@@ -88,21 +89,11 @@ public class Config {
     private void createAdditionalFiles() {
         File themeFile = new File(FoxAC.getInstance().getDataFolder(), "themes.yml");
         if (!themeFile.exists()) {
-            boolean successful = themeFile.getParentFile().mkdirs();
-            if(!successful) {
-                MessageUtils.sendConsoleMessage("Couldn't create a new directory called FoxAC.");
-                FoxAC.getInstance().getPluginLoader().disablePlugin(FoxAC.getInstance());
-            }
             FoxAC.getInstance().saveResource("themes.yml", false);
         }
 
         File checksFile = new File(FoxAC.getInstance().getDataFolder(), "checks.yml");
         if (!checksFile.exists()) {
-            boolean successful = checksFile.getParentFile().mkdirs();
-            if(!successful) {
-                MessageUtils.sendConsoleMessage("Couldn't create a new directory called FoxAC.");
-                FoxAC.getInstance().getPluginLoader().disablePlugin(FoxAC.getInstance());
-            }
             FoxAC.getInstance().saveResource("checks.yml", false);
         }
 

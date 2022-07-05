@@ -101,7 +101,6 @@ public class ConnectionProcessor {
 
     public void addPostTask(Runnable runnable) {
         transactionTasks.put(nextIndex(), runnable);
-        Bukkit.broadcastMessage("ass1");
     }
 
     public enum TransactionType {

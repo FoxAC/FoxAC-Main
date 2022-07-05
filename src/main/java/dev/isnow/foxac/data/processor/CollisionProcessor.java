@@ -1,8 +1,8 @@
 package dev.isnow.foxac.data.processor;
 
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.util.Pair;
 import dev.isnow.foxac.util.mc.BoundingBox;
-import javafx.util.Pair;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;

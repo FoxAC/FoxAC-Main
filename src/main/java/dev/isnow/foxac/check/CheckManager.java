@@ -1,12 +1,15 @@
 package dev.isnow.foxac.check;
 
 import dev.isnow.foxac.FoxAC;
+import dev.isnow.foxac.check.impl.combat.aura.AuraA;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.data.PlayerData;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author 5170
@@ -29,12 +32,14 @@ public class CheckManager {
     public void loadChecks() {
 
         List<Check> checks = new ArrayList<>();
+        checks.add(new AuraA());
 
         for (Check check : checks) {
-            CheckInConfig checkInConfig = FoxAC.getInstance().getConfiguration().getChecks().get(check.getName() + check.getType());
+            CheckInConfig checkInConfig = FoxAC.getInstance().getConfiguration().getChecks().get(check.getName().toLowerCase(Locale.ROOT) + check.getType().toLowerCase(Locale.ROOT));
             if (checkInConfig.getEnabled()) {
+                Bukkit.broadcastMessage("Check " + check.getName() + check.getType() + " Loaded!");
+                check.setData(data);
                 loadedChecks.add(check);
-
             }
         }
 
