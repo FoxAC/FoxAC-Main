@@ -29,6 +29,7 @@ public class PlayerData {
     private final ReachProcessor reachProcessor = new ReachProcessor(this);
     private final StatusProcessor statusProcessor = new StatusProcessor(this);
     private final VelocityProcessor velocityProcessor = new VelocityProcessor(this);
+    private final CollisionProcessor collisionProcessor = new CollisionProcessor(this);
 
     private CheckManager checkManager = new CheckManager(this);
 

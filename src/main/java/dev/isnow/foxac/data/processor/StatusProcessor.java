@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPl
 import dev.isnow.foxac.data.PlayerData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.GameMode;
 
@@ -15,6 +16,7 @@ import java.util.LinkedList;
  * made on dev.isnow.foxac.data.processor
  */
 
+@Getter
 @RequiredArgsConstructor
 public class StatusProcessor {
 

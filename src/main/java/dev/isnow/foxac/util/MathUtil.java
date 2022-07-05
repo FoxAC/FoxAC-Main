@@ -71,6 +71,9 @@ public class MathUtil {
         return value;
     }
 
+    public double hypot(final double x, final double z) {
+        return Math.sqrt(x * x + z * z);
+    }
 
     /**
      * pasted from minecraft source code

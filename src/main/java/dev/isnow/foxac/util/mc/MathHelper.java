@@ -193,6 +193,11 @@ public class MathHelper {
         return p_151240_1_ >= p_151240_2_ ? p_151240_1_ : p_151240_0_.nextFloat() * (p_151240_2_ - p_151240_1_) + p_151240_1_;
     }
 
+    public static int floor(double d0) {
+        int i = (int) d0;
+        return d0 < (double) i ? i - 1 : i;
+    }
+
     public static double getRandomDoubleInRange(Random p_82716_0_, double p_82716_1_, double p_82716_3_) {
         return p_82716_1_ >= p_82716_3_ ? p_82716_1_ : p_82716_0_.nextDouble() * (p_82716_3_ - p_82716_1_) + p_82716_1_;
     }

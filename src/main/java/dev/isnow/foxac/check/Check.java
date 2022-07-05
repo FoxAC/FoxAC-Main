@@ -26,7 +26,6 @@ public abstract class Check {
     protected final PlayerData data;
 
     private final String name, type, description;
-    private final Category category;
     private final Boolean experimental;
     private final int maxvl;
 
@@ -38,8 +37,9 @@ public abstract class Check {
         this.type = type;
         this.data = data;
 
+        Bukkit.broadcastMessage(name + type);
         CheckInConfig checkInConfig = FoxAC.getInstance().getConfiguration().getChecks().get(name + type);
-        this.category = checkInConfig.getCategory();
+//        this.category = checkInConfig.getCategory();
         this.experimental = experimental;
         this.maxvl = checkInConfig.getMaxvl();
         this.description = checkInConfig.getDescription();

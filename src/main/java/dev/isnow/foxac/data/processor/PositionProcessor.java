@@ -4,6 +4,7 @@ import com.github.retrooper.packetevents.protocol.world.Location;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.util.MathUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -64,12 +65,13 @@ public class PositionProcessor {
             motionY = y = lastY;
             motionZ = z - lastZ;
 
-            //faster than java's Math.hypot
-            motionXZ = Math.sqrt((motionX * motionX) + (motionZ * motionZ));
+            motionXZ = MathUtil.hypot(motionX, motionZ);
 
             lastLocation = currentLocation != null ? currentLocation : new Location(new Vector3d(lastX, lastY, lastZ), 0, 0);
             currentLocation = flyingLoc;
 
         }
+
+        data.getCollisionProcessor().updateCollisions();
     }
 }

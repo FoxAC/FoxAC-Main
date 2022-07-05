@@ -45,18 +45,18 @@ public class ActionProcessor {
             blocking = false;
         }
 
-        if(wrapper.getItemStack().isPresent() && wrapper.getFace() == BlockFace.OTHER && Bukkit.getPlayer(data.getPlayer().getUUID()).getItemInHand().toString().contains("SWORD")) {
+        if(wrapper.getItemStack().isPresent() && wrapper.getFace() == BlockFace.OTHER && Bukkit.getPlayer(data.getPlayer().getUniqueId()).getItemInHand().toString().contains("SWORD")) {
             blocking = true;
         }
     }
     public void handleFlying() {
         attacking = false;
-        if (!Bukkit.getPlayer(data.getPlayer().getUUID()).getItemInHand().toString().contains("SWORD")) blocking = false;
-        if (!Bukkit.getPlayer(data.getPlayer().getUUID()).getItemInHand().getType().isEdible()) eating = false;
+        if (!data.getPlayer().getItemInHand().toString().contains("SWORD")) blocking = false;
+        if (!Bukkit.getPlayer(data.getPlayer().getUniqueId()).getItemInHand().getType().isEdible()) eating = false;
     }
 
     public void handleUseItem(WrapperPlayClientUseItem wrapper) {
-        if (Bukkit.getPlayer(data.getPlayer().getUUID()).getInventory().getItemInHand().getType().isEdible()) {
+        if (data.getPlayer().getInventory().getItemInHand().getType().isEdible()) {
             eating = true;
         }
     }
