@@ -1,10 +1,7 @@
 package dev.isnow.foxac.util.mc;
 
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientTeleportConfirm;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Set;
 
 /**
  * @author 5170

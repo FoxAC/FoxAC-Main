@@ -10,7 +10,7 @@ public class MovingObjectPosition {
      * The vector position of the hit
      */
     public Vec3 hitVec;
-    private BlockPos blockPos;
+    private final BlockPos blockPos;
 
     public MovingObjectPosition(Vec3 hitVecIn, EnumFacing facing, BlockPos blockPosIn) {
         this(MovingObjectType.BLOCK, hitVecIn, facing, blockPosIn);

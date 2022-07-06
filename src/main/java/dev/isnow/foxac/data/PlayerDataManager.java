@@ -1,7 +1,6 @@
 package dev.isnow.foxac.data;
 
 import com.github.retrooper.packetevents.protocol.player.User;
-import dev.isnow.foxac.FoxAC;
 
 import java.util.HashMap;
 

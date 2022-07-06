@@ -1,15 +1,12 @@
 package dev.isnow.foxac.data;
 
 import com.github.retrooper.packetevents.protocol.player.User;
-import dev.isnow.foxac.check.Check;
 import dev.isnow.foxac.check.CheckManager;
 import dev.isnow.foxac.data.processor.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
 
 /**
  * @author 5170

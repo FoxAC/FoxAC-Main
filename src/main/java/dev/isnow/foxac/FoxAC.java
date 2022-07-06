@@ -1,7 +1,6 @@
 package dev.isnow.foxac;
 
 import com.github.retrooper.packetevents.PacketEvents;
-import dev.isnow.foxac.check.CheckManager;
 import dev.isnow.foxac.config.Config;
 import dev.isnow.foxac.data.PlayerDataManager;
 import dev.isnow.foxac.packet.PacketProcessor;
