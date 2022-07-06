@@ -67,8 +67,6 @@ public final class FoxAC extends JavaPlugin {
 
         new PledgeLoader().load(this);
 
-
-
         MessageUtils.sendConsoleMessage("Loaded in " + (System.currentTimeMillis() - start) / 1000 + " seconds!");
     }
 
