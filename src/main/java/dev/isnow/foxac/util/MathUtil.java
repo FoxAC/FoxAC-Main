@@ -4,6 +4,7 @@ import dev.isnow.foxac.util.mc.MathHelper;
 import dev.isnow.foxac.util.mc.Vec3;
 import lombok.experimental.UtilityClass;
 import lombok.var;
+import org.bukkit.util.NumberConversions;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -87,4 +88,7 @@ public class MathUtil {
     }
 
 
+    public int getPingTicks(final long ping, final int extraTicks) {
+        return NumberConversions.floor(ping / 50.0D) + extraTicks;
+    }
 }

@@ -8,10 +8,7 @@ import com.github.retrooper.packetevents.event.simple.PacketPlaySendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.player.User;
 import com.github.retrooper.packetevents.wrapper.play.client.*;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityVelocity;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerKeepAlive;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerAbilities;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
+import com.github.retrooper.packetevents.wrapper.play.server.*;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.check.Check;
 import dev.isnow.foxac.data.PlayerData;
@@ -42,6 +39,8 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
         if (data == null) return;
 
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
+            data.getConnectionProcessor().handleFlying();
+            data.getTeleportProcessor().handleFlying();
             data.getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
             data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
             data.getReachProcessor().handleFlying();
@@ -70,18 +69,13 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
         }
 
         if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
-            data.getConnectionProcessor().handleWindowConfirmationRecieveing(new WrapperPlayClientWindowConfirmation(event));
+            data.getConnectionProcessor().handleClientTransaction(new WrapperPlayClientWindowConfirmation(event));
         }
 
-        if (event.getPacketType() == PacketType.Play.Client.KEEP_ALIVE) {
-            data.getConnectionProcessor().handleKeepAliveRecieveing();
-        }
 
 
         for (Check check : data.getCheckManager().getLoadedChecks()) {
             check.handleCheck(new FPacketEvent(event));
-
-
         }
     }
 
@@ -92,11 +86,7 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
         if (data == null) return;
 
         if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
-            data.getConnectionProcessor().handleWindowConfirmationSending(new WrapperPlayServerWindowConfirmation(event));
-        }
-
-        if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
-            data.getConnectionProcessor().handleKeepAliveSending(new WrapperPlayServerKeepAlive(event));
+            data.getConnectionProcessor().handleServerTransaction(new WrapperPlayServerWindowConfirmation(event));
         }
 
         if(event.getPacketType() == PacketType.Play.Server.ENTITY_VELOCITY) {
@@ -105,6 +95,10 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if(event.getPacketType() == PacketType.Play.Server.PLAYER_ABILITIES) {
             data.getStatusProcessor().handleAbilities(new WrapperPlayServerPlayerAbilities(event));
+        }
+
+        if(event.getPacketType() == PacketType.Play.Server.PLAYER_POSITION_AND_LOOK) {
+            data.getTeleportProcessor().handleServerPosition(new WrapperPlayServerPlayerPositionAndLook(event));
         }
 
         for (Check check : data.getCheckManager().getLoadedChecks()) {

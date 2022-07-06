@@ -202,7 +202,9 @@ public class ReachProcessor {
              */
 
             //TODO PUT THIS ON PRE TRANSACTION
-            data.getConnectionProcessor().addPreTask(() -> steps = 3);
+            PacketConfirmedAction pca = () -> steps = 3;
+
+            data.getConnectionProcessor().tickAndConfirm(pca);
 
             //TODO PUT THIS ON POST TRANSACTION
 

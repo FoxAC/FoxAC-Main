@@ -53,6 +53,10 @@ public class PositionProcessor {
         lastY = y;
         lastZ = z;
 
+        if(flying.hasRotationChanged() && !clientOnGround) {
+            data.getTeleportProcessor().checkTeleports(x, y, z);
+        }
+
         if (flying.hasPositionChanged()) {
 
             Location flyingLoc = flying.getLocation();

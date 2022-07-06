@@ -1,21 +1,23 @@
 package dev.isnow.foxac.data.processor;
 
+import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerKeepAlive;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.util.MathUtil;
 import dev.thomazz.pledge.api.event.TransactionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author Lindgey
+ * @author 5170
  * made on dev.isnow.foxac.data.processor
  */
 
@@ -25,94 +27,83 @@ public class ConnectionProcessor {
 
     private final PlayerData data;
 
-    private final Deque<Transaction> transactions = new ArrayDeque<>();
-    private final Deque<Long> keepAlives = new ArrayDeque<>();
-    private final Multimap<Short, Runnable> transactionTasks = ArrayListMultimap.create();
-    private short index;
-    private int keepAlivePing, transactionPing;
-    private long lastKeepAliveSent;
+    private AtomicInteger transactionTick = new AtomicInteger();
 
+    private final Map<Short, Long> transactionMap = new HashMap<>();
+    private final Deque<Short> transactionDeque = new LinkedList<>();
+    private final Map<Short, List<PacketConfirmedAction>> actionMap = new HashMap<>();
 
-    public void onTransaction(TransactionEvent event, TransactionType type) {
-        switch (type) {
-            case SEND_START:
-            case SEND_END:
-                index = type == TransactionType.SEND_START ? (short) event.getTransactionPair().getId1()
-                        : (short) event.getTransactionPair().getId2();
-                break;
-        }
+    private long lastFlying, lastDelta;
+
+    @Getter
+    private long ping;
+
+    public short getNextTick() {
+        transactionTick.incrementAndGet();
+        return (short) (-(transactionTick.get() * 2) % Short.MAX_VALUE);
     }
 
-    public void handleWindowConfirmationSending(WrapperPlayServerWindowConfirmation wrapper) {
-        if (wrapper.getWindowId() == 0 && !wrapper.isAccepted()) {
-            transactions.add(new Transaction(wrapper.getActionId(), System.currentTimeMillis()));
-        }
-    }
+    public void handleClientTransaction(WrapperPlayClientWindowConfirmation wrapper) {
+        short id = wrapper.getActionId();
 
-    public void handleKeepAliveSending(WrapperPlayServerKeepAlive wrapper) {
-        this.lastKeepAliveSent = System.currentTimeMillis();
+        if (transactionMap.containsKey(id)) {
+            ping = System.currentTimeMillis() - transactionMap.get(id);
 
-        keepAlives.add(wrapper.getId());
-    }
+            actionMap.get(id).forEach(PacketConfirmedAction::run);
+            actionMap.remove(id);
 
+            int expected = transactionDeque.getFirst();
 
-    public void handleWindowConfirmationRecieveing(WrapperPlayClientWindowConfirmation wrapper) {
-        Transaction transaction = transactions.poll();
-
-        if (wrapper.getWindowId() == 0) {
-            if(transaction == null) {
-                return; // Not our transaction?
+            if (expected != id) {
+                return; // ????
             }
-            if (wrapper.getActionId() == transaction.id) {
 
-                if (transactionTasks.containsKey(transaction.id)) {
-                    for (Runnable runnable : transactionTasks.removeAll(transaction.id)) {
-                        runnable.run();
-                    }
-                }
+            transactionDeque.removeFirst();
+        }
+        else {
+            // ???????
+            return;
+        }
+        transactionMap.remove(id);
+    }
 
-            /*
-            transaction ping would be more accurate as I know
-             */
-                transactionPing = (int) (System.currentTimeMillis() - transaction.timestamp);
+    // TODO: complete this, not working atm
+    public void tickAndConfirm(PacketConfirmedAction action) {
+        short tick = getNextTick();
 
-            }
+        PacketEvents.getAPI().getPlayerManager().getUser(data.getPlayer()).sendPacket(new WrapperPlayServerWindowConfirmation( 0, tick, false));
+
+        if (!actionMap.containsKey(tick)) {
+            actionMap.put(tick, new ArrayList<>());
         }
 
+        actionMap.get(tick).add(action);
     }
 
-    public void handleKeepAliveRecieveing() {
-        keepAlivePing = (int) (System.currentTimeMillis() - lastKeepAliveSent);
-    }
+    public void handleServerTransaction(WrapperPlayServerWindowConfirmation wrapper) {
+        short id = wrapper.getActionId();
 
-    private short nextIndex() {
-        short nextIndex = (short) (index + 1);
+        actionMap.putIfAbsent(id, new ArrayList<>());
+        transactionMap.putIfAbsent(id, System.currentTimeMillis());
+        transactionDeque.add(id);
 
-        if (nextIndex < 0) {
-            nextIndex = 0;
+        if ((transactionMap.size() / 40.0) > 15000) {
+            data.getPlayer().kickPlayer("Timed out.");
         }
-
-        return nextIndex;
     }
 
-    public void addPreTask(Runnable runnable) {
-        transactionTasks.put(index, runnable);
+    public void handleFlying() {
+        long now = System.currentTimeMillis();
+
+        lastDelta = now - lastFlying;
+        lastFlying = now;
     }
 
-    public void addPostTask(Runnable runnable) {
-        transactionTasks.put(nextIndex(), runnable);
-    }
 
-    public enum TransactionType {
-        RECEIVE_START,
-        RECEIVE_END,
-        SEND_START,
-        SEND_END
+    public int getPingTicks() {
+        return Math.min(50, MathUtil.getPingTicks(ping, 10));
     }
-
-    @RequiredArgsConstructor
-    public static class Transaction {
-        public final short id;
-        public final long timestamp;
-    }
+}
+interface PacketConfirmedAction {
+    void run();
 }

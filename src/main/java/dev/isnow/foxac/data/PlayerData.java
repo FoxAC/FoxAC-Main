@@ -30,6 +30,7 @@ public class PlayerData {
     private final StatusProcessor statusProcessor = new StatusProcessor(this);
     private final VelocityProcessor velocityProcessor = new VelocityProcessor(this);
     private final CollisionProcessor collisionProcessor = new CollisionProcessor(this);
+    private final TeleportProcessor teleportProcessor = new TeleportProcessor(this);
 
     private final CheckManager checkManager = new CheckManager(this);
 
