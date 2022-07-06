@@ -46,6 +46,7 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
             data.getTeleportProcessor().handleFlying();
             data.getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
             data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
+            data.getGhostBlockProcessor().handleClientFlying(new WrapperPlayClientPlayerFlying(event));
             data.getReachProcessor().handleFlying();
             data.getActionProcessor().handleFlying();
             data.getVelocityProcessor().handleFlying();
@@ -102,6 +103,7 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if(event.getPacketType() == PacketType.Play.Server.PLAYER_POSITION_AND_LOOK) {
             data.getTeleportProcessor().handleServerPosition(new WrapperPlayServerPlayerPositionAndLook(event));
+            data.getGhostBlockProcessor().handleServerPosition();
         }
 
         for (Check check : data.getCheckManager().getLoadedChecks()) {

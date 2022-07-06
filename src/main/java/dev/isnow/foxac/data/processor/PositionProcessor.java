@@ -20,7 +20,8 @@ public class PositionProcessor {
     private final PlayerData data;
 
     private boolean clientInAir, clientOnGround;
-    public boolean lastClientInAir, lastClientOnGround;
+    private boolean lastClientInAir, lastClientOnGround;
+    private boolean mathematicallyOnGround, lastMathematicallyOnGround;
 
     private int clientAirTicks, clientGroundTicks;
 
@@ -44,20 +45,20 @@ public class PositionProcessor {
             clientAirTicks++;
         }
 
-        lastMotionX = motionX;
-        lastMotionY = motionY;
-        lastMotionZ = motionZ;
-        lastMotionXZ = motionXZ;
-
-        lastX = x;
-        lastY = y;
-        lastZ = z;
-
-        if(flying.hasRotationChanged() && !clientOnGround) {
-            data.getTeleportProcessor().checkTeleports(x, y, z);
-        }
-
         if (flying.hasPositionChanged()) {
+
+            lastMotionX = motionX;
+            lastMotionY = motionY;
+            lastMotionZ = motionZ;
+            lastMotionXZ = motionXZ;
+
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+
+            // Update this only if pos changed because it requires y-coordinate to change.
+            lastMathematicallyOnGround = mathematicallyOnGround;
+            mathematicallyOnGround = y % 0.015625 == 0.0;
 
             Location flyingLoc = flying.getLocation();
 
@@ -71,9 +72,16 @@ public class PositionProcessor {
 
             motionXZ = MathUtil.hypot(motionX, motionZ);
 
+            lastMathematicallyOnGround = mathematicallyOnGround;
+            mathematicallyOnGround = y % 0.015625 == 0.0;
+
             lastLocation = currentLocation != null ? currentLocation : new Location(new Vector3d(lastX, lastY, lastZ), 0, 0);
             currentLocation = flyingLoc;
 
+        }
+
+        if(flying.hasRotationChanged() && !clientOnGround) {
+            data.getTeleportProcessor().checkTeleports(x, y, z);
         }
 
         data.getCollisionProcessor().updateCollisions();

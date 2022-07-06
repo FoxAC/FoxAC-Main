@@ -22,7 +22,7 @@ public class CollisionProcessor {
 
     private final PlayerData data;
 
-    private boolean serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock, piston;
+    private boolean lastServerInAir, serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock, piston;
 
     void updateCollisions() {
         BoundingBox box = new BoundingBox(data.getPositionProcessor().getCurrentLocation(), 0.6f, 1.8f);
@@ -37,7 +37,8 @@ public class CollisionProcessor {
 
         for (Pair<Material, Location> pair : blocks) {
 
-            serverInAir = pair.getKey().isSolid();
+            lastServerInAir = serverInAir;
+            serverInAir = !pair.getKey().isSolid();
             slime = pair.getKey().toString().contains("SLIME");
             ice = pair.getKey().toString().contains("ICE");
             liquid = pair.getKey().toString().contains("WATER") || pair.getKey().toString().contains("LAVA");

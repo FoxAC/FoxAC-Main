@@ -28,6 +28,7 @@ public class PlayerData {
     private final VelocityProcessor velocityProcessor = new VelocityProcessor(this);
     private final CollisionProcessor collisionProcessor = new CollisionProcessor(this);
     private final TeleportProcessor teleportProcessor = new TeleportProcessor(this);
+    private final GhostBlockProcessor ghostBlockProcessor = new GhostBlockProcessor(this);
 
     private final CheckManager checkManager = new CheckManager(this);
 
