@@ -22,7 +22,7 @@ public class CollisionProcessor {
 
     private final PlayerData data;
 
-    private boolean serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock;
+    private boolean serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock, piston;
 
     void updateCollisions() {
         BoundingBox box = new BoundingBox(data.getPositionProcessor().getCurrentLocation(), 0.6f, 1.8f);
@@ -44,6 +44,7 @@ public class CollisionProcessor {
             halfBlock = pair.getKey().toString().contains("STAIRS") || pair.getKey().toString().contains("SLAB") || pair.getKey().toString().contains("STEP") || pair.getKey().toString().contains("HEAD") || pair.getKey().toString().contains("SKULL");
             web = pair.getKey().toString().contains("WEB");
             climbable = pair.getKey().toString().contains("LADDER") || pair.getKey().toString().contains("VINE");
+            piston = pair.getKey().toString().contains("PISTON");
 
             // FIXME: flags when touching a wall.
             if (pair.getValue().getY() >= box.minY && pair.getKey().isSolid()) underBlock = true;

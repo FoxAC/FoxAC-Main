@@ -3,6 +3,7 @@ package dev.isnow.foxac.data.processor;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityVelocity;
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.util.MathUtil;
 import dev.isnow.foxac.util.PlayerUtilities;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -46,13 +47,13 @@ public class VelocityProcessor {
     @Getter
     public class ConfirmedVelocity {
 
-        private double x, y, z;
+        private double x, y, z, xz;
 
         public ConfirmedVelocity(final Vector3d vector3d) {
             this.x = vector3d.x;
             this.y = vector3d.y;
             this.z = vector3d.z;
-
+            this.xz = MathUtil.hypot(x, z);
         }
 
         public void handleTick(int ticks) {
@@ -72,12 +73,13 @@ public class VelocityProcessor {
 
             x += moveFactor;
             z += moveFactor;
-
+            xz = MathUtil.hypot(x, z);
 
             if (data.getPlayer().hasPotionEffect(PotionEffectType.SPEED)) {
                 int amplifier = PlayerUtilities.getPotionLevel(data.getPlayer(), PotionEffectType.SPEED);
                 x = (x * Math.pow(0.9, amplifier)) - 0.01;
                 z = (z * Math.pow(0.9, amplifier)) - 0.01;
+                xz = MathUtil.hypot(x, z);
             }
 
             /*

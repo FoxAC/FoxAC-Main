@@ -18,8 +18,8 @@ public class AuraA extends Check {
 
     @Override
     public void handleCheck(FPacketEvent packetEvent) {
-        if(packetEvent.getPacketType() == PacketType.Play.Client.PLAYER_FLYING) {
-            Bukkit.broadcastMessage("works!");
+        if(data.getActionProcessor().isSprinting() && data.getActionProcessor().isAttacking()) {
+            fail(); // this shit is going to false so much, testing purposes only
         }
     }
 }

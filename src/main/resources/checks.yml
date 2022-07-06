@@ -10,16 +10,16 @@ movement:
       description: "Predicts player's maximum ΔXZ based on situations."
       maxvl: 20
       enabled: true
-  motion:
+  flight:
     a:
-      description: "Detects invalid motion on ladders."
+      description: "Predicts player's gravity by a simple formula."
       maxvl: 10
       enabled: true
 player:
   timer:
     a:
-      description: "Detects game speed modifications."
-      maxvl: 50
+      description: "Detects game speed modifications, does not have autoban."
+      maxvl: 10000
       enabled: true
 exploit:
   groundspoof:
