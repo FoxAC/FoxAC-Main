@@ -69,8 +69,7 @@ public class ConnectionProcessor {
             }
 
             transactionDeque.removeFirst();
-        }
-        else {
+        } else {
             // ???????
             return;
         }
@@ -81,7 +80,7 @@ public class ConnectionProcessor {
     public void tickAndConfirm(PacketConfirmedAction action) {
         short tick = getNextTick();
 
-        PacketEvents.getAPI().getPlayerManager().getUser(data.getPlayer()).sendPacket(new WrapperPlayServerWindowConfirmation( 0, tick, false));
+        PacketEvents.getAPI().getPlayerManager().getUser(data.getPlayer()).sendPacket(new WrapperPlayServerWindowConfirmation(0, tick, false));
 
         if (!actionMap.containsKey(tick)) {
             actionMap.put(tick, new ArrayList<>());
@@ -114,6 +113,7 @@ public class ConnectionProcessor {
         return Math.min(50, MathUtil.getPingTicks(ping, 10));
     }
 
-interface PacketConfirmedAction {
-    void run();
+    interface PacketConfirmedAction {
+        void run();
+    }
 }
