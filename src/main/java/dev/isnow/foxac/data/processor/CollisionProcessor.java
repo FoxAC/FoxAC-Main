@@ -1,18 +1,15 @@
 package dev.isnow.foxac.data.processor;
 
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.tick.TimedObservable;
 import dev.isnow.foxac.util.Pair;
 import dev.isnow.foxac.util.mc.BoundingBox;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +24,7 @@ public class CollisionProcessor {
     private final PlayerData data;
 
     private boolean serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock;
+    private TimedObservable slimeTimer = new TimedObservable(false);
 
     void updateCollisions() {
         BoundingBox box = new BoundingBox(data.getPositionProcessor().getCurrentLocation(), 0.6f, 1.8f);
@@ -48,6 +46,10 @@ public class CollisionProcessor {
             halfBlock = pair.getKey().toString().contains("STAIRS") || pair.getKey().toString().contains("SLAB") || pair.getKey().toString().contains("STEP") || pair.getKey().toString().contains("HEAD") || pair.getKey().toString().contains("SKULL");
             web = pair.getKey().toString().contains("WEB");
             climbable = pair.getKey().toString().contains("LADDER") || pair.getKey().toString().contains("VINE");
+
+            if (slime) {
+                slimeTimer.setValue(true);
+            } else slimeTimer.setValue(false);
 
             // FIXME: flags when touching a wall.
             if (pair.getValue().getY() >= box.minY && pair.getKey().isSolid()) underBlock = true;

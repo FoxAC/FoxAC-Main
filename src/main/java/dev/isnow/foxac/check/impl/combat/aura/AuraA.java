@@ -20,7 +20,7 @@ public class AuraA extends Check {
     @Override
     public void handleCheck(FPacketEvent packetEvent) {
         if(packetEvent.getPacketType() == PacketType.Play.Client.PLAYER_FLYING) {
-            Bukkit.broadcastMessage("works!");
+            //Bukkit.broadcastMessage("works!");
         }
     }
 }

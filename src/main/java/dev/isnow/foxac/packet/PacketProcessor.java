@@ -41,6 +41,8 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if (data == null) return;
 
+        data.getConnectionProcessor().process(event);
+
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             data.getPositionProcessor().handlePosition(new WrapperPlayClientPlayerFlying(event));
             data.getRotationProcessor().processPacket(new WrapperPlayClientPlayerFlying(event));
@@ -69,13 +71,6 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
             data.getActionProcessor().handleUseItem(new WrapperPlayClientUseItem(event));
         }
 
-        if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
-            data.getConnectionProcessor().handleWindowConfirmationRecieveing(new WrapperPlayClientWindowConfirmation(event));
-        }
-
-        if (event.getPacketType() == PacketType.Play.Client.KEEP_ALIVE) {
-            data.getConnectionProcessor().handleKeepAliveRecieveing();
-        }
 
 
         for (Check check : data.getCheckManager().getLoadedChecks()) {
@@ -91,13 +86,8 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if (data == null) return;
 
-        if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
-            data.getConnectionProcessor().handleWindowConfirmationSending(new WrapperPlayServerWindowConfirmation(event));
-        }
+        data.getConnectionProcessor().process(event);
 
-        if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
-            data.getConnectionProcessor().handleKeepAliveSending(new WrapperPlayServerKeepAlive(event));
-        }
 
         if(event.getPacketType() == PacketType.Play.Server.ENTITY_VELOCITY) {
             data.getVelocityProcessor().handleVelocity(new WrapperPlayServerEntityVelocity(event));

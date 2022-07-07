@@ -1,5 +1,9 @@
 package dev.isnow.foxac.data.processor;
 
+import com.github.retrooper.packetevents.event.simple.PacketPlayReceiveEvent;
+import com.github.retrooper.packetevents.event.simple.PacketPlaySendEvent;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientKeepAlive;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerKeepAlive;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
@@ -10,7 +14,9 @@ import dev.thomazz.pledge.api.event.TransactionEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
+import java.lang.management.BufferPoolMXBean;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -32,7 +38,6 @@ public class ConnectionProcessor {
     private int keepAlivePing, transactionPing;
     private long lastKeepAliveSent;
 
-
     public void onTransaction(TransactionEvent event, TransactionType type) {
         switch (type) {
             case SEND_START:
@@ -41,48 +46,57 @@ public class ConnectionProcessor {
                         : (short) event.getTransactionPair().getId2();
                 break;
         }
+
+        Bukkit.broadcastMessage(type.name());
     }
 
-    public void handleWindowConfirmationSending(WrapperPlayServerWindowConfirmation wrapper) {
-        if (wrapper.getWindowId() == 0 && !wrapper.isAccepted()) {
-            transactions.add(new Transaction(wrapper.getActionId(), System.currentTimeMillis()));
+    public void process(PacketPlaySendEvent event) {
+        if (event.getPacketType() == PacketType.Play.Server.WINDOW_CONFIRMATION) {
+            WrapperPlayServerWindowConfirmation wrapper = new WrapperPlayServerWindowConfirmation(event);
+
+            if (wrapper.getWindowId() == 0 && !wrapper.isAccepted()) {
+                transactions.add(new Transaction(wrapper.getActionId(), System.currentTimeMillis()));
+            }
+        } else if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
+            WrapperPlayServerKeepAlive wrapper = new WrapperPlayServerKeepAlive(event);
+
+            this.lastKeepAliveSent = System.currentTimeMillis();
+
+            keepAlives.add(wrapper.getId());
         }
     }
 
-    public void handleKeepAliveSending(WrapperPlayServerKeepAlive wrapper) {
-        this.lastKeepAliveSent = System.currentTimeMillis();
 
-        keepAlives.add(wrapper.getId());
-    }
+    public void process(PacketPlayReceiveEvent event) {
+        if (event.getPacketType() == PacketType.Play.Client.WINDOW_CONFIRMATION) {
+            WrapperPlayClientWindowConfirmation wrapper = new WrapperPlayClientWindowConfirmation(event);
 
+            Transaction transaction = transactions.poll();
 
-    public void handleWindowConfirmationRecieveing(WrapperPlayClientWindowConfirmation wrapper) {
-        Transaction transaction = transactions.poll();
-
-        if (wrapper.getWindowId() == 0) {
-            if(transaction == null) {
-                return; // Not our transaction?
-            }
-            if (wrapper.getActionId() == transaction.id) {
+            if (wrapper.getWindowId() == 0
+                    && wrapper.getActionId() == transaction.id) {
 
                 if (transactionTasks.containsKey(transaction.id)) {
                     for (Runnable runnable : transactionTasks.removeAll(transaction.id)) {
                         runnable.run();
+                        Bukkit.broadcastMessage("lol");
                     }
                 }
 
-            /*
-            transaction ping would be more accurate as I know
-             */
+                /*
+                transaction ping would be more accurate as i know
+                 */
                 transactionPing = (int) (System.currentTimeMillis() - transaction.timestamp);
 
             }
+
+
+
+        } else if (event.getPacketType() == PacketType.Play.Client.KEEP_ALIVE) {
+            this.keepAlivePing = (int) (System.currentTimeMillis() - lastKeepAliveSent);
+
+
         }
-
-    }
-
-    public void handleKeepAliveRecieveing() {
-        keepAlivePing = (int) (System.currentTimeMillis() - lastKeepAliveSent);
     }
 
     private short nextIndex() {
@@ -111,7 +125,7 @@ public class ConnectionProcessor {
     }
 
     @RequiredArgsConstructor
-    public static class Transaction {
+    public class Transaction {
         public final short id;
         public final long timestamp;
     }

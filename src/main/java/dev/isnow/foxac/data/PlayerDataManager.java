@@ -1,8 +1,8 @@
 package dev.isnow.foxac.data;
 
 import com.github.retrooper.packetevents.protocol.player.User;
-import dev.isnow.foxac.FoxAC;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 
@@ -22,5 +22,9 @@ public class PlayerDataManager {
     public void initUser(User user) {
         data.put(user, new PlayerData(user));
 
+    }
+
+    public Collection<PlayerData> getWholeData() {
+        return data.values();
     }
 }

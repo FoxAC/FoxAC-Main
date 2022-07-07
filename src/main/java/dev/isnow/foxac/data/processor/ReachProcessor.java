@@ -123,10 +123,14 @@ public class ReachProcessor {
         if (event.getPacketType() == PacketType.Play.Server.SPAWN_PLAYER) {
             final WrapperPlayServerSpawnPlayer packet = new WrapperPlayServerSpawnPlayer(event);
 
+            if(packet.getEntityId() == data.getPlayer().getEntityId()) return;
+
             tracked.add(new EData(packet.getEntityId(), packet.getPosition()));
 
         } else if (event.getPacketType() == PacketType.Play.Server.SPAWN_LIVING_ENTITY) {
             final WrapperPlayServerSpawnPlayer packet = new WrapperPlayServerSpawnPlayer(event);
+
+            if(packet.getEntityId() == data.getPlayer().getEntityId()) return;
 
             tracked.add(new EData(packet.getEntityId(), packet.getPosition()));
 
@@ -188,10 +192,13 @@ public class ReachProcessor {
              */
 
             //TODO PUT THIS ON PRE TRANSACTION
-            steps = 3;
+            data.getConnectionProcessor().addPreTask(() -> steps = 3);
 
             //TODO PUT THIS ON POST TRANSACTION
-            second = first.add(move);
+            data.getConnectionProcessor().addPostTask(() -> {
+                second = first.add(move);
+            });
+
 
 
         }
@@ -206,14 +213,16 @@ public class ReachProcessor {
 
             //TODO PUT THIS ON POST TRANSACTION
 
-            double deltaX = first.x - pos.x;
-            double deltaY = first.y - pos.y;
-            double deltaZ = first.z - pos.z;
+            data.getConnectionProcessor().addPostTask(() -> {
+                double deltaX = first.x - pos.x;
+                double deltaY = first.y - pos.y;
+                double deltaZ = first.z - pos.z;
 
-            if (Math.abs(deltaX) < 0.03125D && Math.abs(deltaY) < 0.015625D && Math.abs(deltaZ) < 0.03125D)
-                second = first;
-            else
-                second = pos;
+                if (Math.abs(deltaX) < 0.03125D && Math.abs(deltaY) < 0.015625D && Math.abs(deltaZ) < 0.03125D)
+                    second = first;
+                else
+                    second = pos;
+            });
 
 
         }

@@ -6,6 +6,7 @@ import dev.isnow.foxac.config.Config;
 import dev.isnow.foxac.data.PlayerDataManager;
 import dev.isnow.foxac.packet.PacketProcessor;
 import dev.isnow.foxac.pledge.PledgeLoader;
+import dev.isnow.foxac.tick.TickRunnable;
 import dev.isnow.foxac.util.MessageUtils;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
@@ -17,6 +18,8 @@ public final class FoxAC extends JavaPlugin {
     private static FoxAC instance;
     @Getter
     private final PlayerDataManager dataManager = new PlayerDataManager();
+
+    private final TickRunnable tickRunnable = new TickRunnable();
 
     @Getter
     private Config configuration;
@@ -46,6 +49,7 @@ public final class FoxAC extends JavaPlugin {
 
         long start = System.currentTimeMillis();
 
+
         MessageUtils.sendConsoleMessage(" /$$$$$$$$ /$$$$$$  /$$   /$$        /$$$$$$  /$$   /$$ /$$$$$$$$ /$$$$$$  /$$$$$$  /$$   /$$ /$$$$$$$$  /$$$$$$  /$$$$$$$$");
         MessageUtils.sendConsoleMessage("| $$_____//$$__  $$| $$  / $$       /$$__  $$| $$$ | $$|__  $$__/|_  $$_/ /$$__  $$| $$  | $$| $$_____/ /$$__  $$|__  $$__/");
         MessageUtils.sendConsoleMessage("| $$     | $$  \\ $$|  $$/ $$/      | $$  \\ $$| $$$$| $$   | $$     | $$  | $$  \\__/| $$  | $$| $$      | $$  \\ $$   | $$   ");
@@ -69,6 +73,8 @@ public final class FoxAC extends JavaPlugin {
         new PledgeLoader().load(this);
 
 
+
+        this.tickRunnable.runTaskTimer(this, 0L,1L);
 
         MessageUtils.sendConsoleMessage("Loaded in " + (System.currentTimeMillis() - start) / 1000 + " seconds!");
     }
