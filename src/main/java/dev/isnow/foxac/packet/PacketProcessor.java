@@ -41,7 +41,7 @@ public class PacketProcessor extends SimplePacketListenerAbstract {
 
         if (data == null) return;
 
-        data.getConnectionProcessor().process(event);
+
 
         if (WrapperPlayClientPlayerFlying.isFlying(event.getPacketType())) {
             data.getConnectionProcessor().handleFlying();
