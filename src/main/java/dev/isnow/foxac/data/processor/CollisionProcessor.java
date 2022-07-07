@@ -23,8 +23,10 @@ public class CollisionProcessor {
 
     private final PlayerData data;
 
-    private boolean serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock;
+
+  
     private TimedObservable slimeTimer = new TimedObservable(false);
+    private boolean lastServerInAir, serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock, piston;
 
     void updateCollisions() {
         BoundingBox box = new BoundingBox(data.getPositionProcessor().getCurrentLocation(), 0.6f, 1.8f);
@@ -39,13 +41,15 @@ public class CollisionProcessor {
 
         for (Pair<Material, Location> pair : blocks) {
 
-            serverInAir = pair.getKey().isSolid();
+            lastServerInAir = serverInAir;
+            serverInAir = !pair.getKey().isSolid();
             slime = pair.getKey().toString().contains("SLIME");
             ice = pair.getKey().toString().contains("ICE");
             liquid = pair.getKey().toString().contains("WATER") || pair.getKey().toString().contains("LAVA");
             halfBlock = pair.getKey().toString().contains("STAIRS") || pair.getKey().toString().contains("SLAB") || pair.getKey().toString().contains("STEP") || pair.getKey().toString().contains("HEAD") || pair.getKey().toString().contains("SKULL");
             web = pair.getKey().toString().contains("WEB");
             climbable = pair.getKey().toString().contains("LADDER") || pair.getKey().toString().contains("VINE");
+            piston = pair.getKey().toString().contains("PISTON");
 
             if (slime) {
                 slimeTimer.setValue(true);

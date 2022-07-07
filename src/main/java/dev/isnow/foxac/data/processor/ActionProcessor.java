@@ -22,7 +22,7 @@ public class ActionProcessor {
 
     private final PlayerData data;
 
-    private boolean sprinting, digging, attacking, sneaking, eating, blocking, chargingBow;
+    private boolean sprinting, digging, attacking, sneaking, eating, blocking, chargingBow, inVehicle;
 
     public void handleEntityAction(WrapperPlayClientEntityAction wrapper) {
         if(wrapper.getAction() == WrapperPlayClientEntityAction.Action.START_SNEAKING) {
@@ -53,6 +53,8 @@ public class ActionProcessor {
         attacking = false;
         if (!data.getPlayer().getItemInHand().toString().contains("SWORD")) blocking = false;
         if (!Bukkit.getPlayer(data.getPlayer().getUniqueId()).getItemInHand().getType().isEdible()) eating = false;
+
+        inVehicle = data.getPlayer().getVehicle() != null;
     }
 
     public void handleUseItem(WrapperPlayClientUseItem wrapper) {

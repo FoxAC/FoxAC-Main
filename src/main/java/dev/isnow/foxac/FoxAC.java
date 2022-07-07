@@ -1,7 +1,6 @@
 package dev.isnow.foxac;
 
 import com.github.retrooper.packetevents.PacketEvents;
-import dev.isnow.foxac.check.CheckManager;
 import dev.isnow.foxac.config.Config;
 import dev.isnow.foxac.data.PlayerDataManager;
 import dev.isnow.foxac.packet.PacketProcessor;
@@ -74,7 +73,9 @@ public final class FoxAC extends JavaPlugin {
 
 
 
+
         this.tickRunnable.runTaskTimer(this, 0L,1L);
+
 
         MessageUtils.sendConsoleMessage("Loaded in " + (System.currentTimeMillis() - start) / 1000 + " seconds!");
     }

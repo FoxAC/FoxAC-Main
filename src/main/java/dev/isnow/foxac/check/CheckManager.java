@@ -2,6 +2,7 @@ package dev.isnow.foxac.check;
 
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.check.impl.combat.aura.AuraA;
+import dev.isnow.foxac.check.impl.movement.speed.SpeedA;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.data.PlayerData;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class CheckManager {
 
         List<Check> checks = new ArrayList<>();
         checks.add(new AuraA());
+        checks.add(new SpeedA());
 
         for (Check check : checks) {
             CheckInConfig checkInConfig = FoxAC.getInstance().getConfiguration().getChecks().get(check.getName().toLowerCase(Locale.ROOT) + check.getType().toLowerCase(Locale.ROOT));

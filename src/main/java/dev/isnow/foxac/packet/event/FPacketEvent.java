@@ -1,7 +1,6 @@
 package dev.isnow.foxac.packet.event;
 
 import com.github.retrooper.packetevents.event.ProtocolPacketEvent;
-import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

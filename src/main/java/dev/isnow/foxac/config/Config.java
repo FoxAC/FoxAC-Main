@@ -4,7 +4,6 @@ import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.check.Category;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.config.impl.Theme;
-import dev.isnow.foxac.util.MessageUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;

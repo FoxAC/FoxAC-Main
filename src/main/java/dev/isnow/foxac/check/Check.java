@@ -1,9 +1,5 @@
 package dev.isnow.foxac.check;
 
-import com.github.retrooper.packetevents.event.simple.PacketPlayReceiveEvent;
-import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.wrapper.PacketWrapper;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChunkDataBulk;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.config.impl.CheckInConfig;
 import dev.isnow.foxac.data.PlayerData;
@@ -32,6 +28,8 @@ public abstract class Check {
 
     private int vl;
 
+    private double buffer;
+
     public Check(String name, String type, boolean experimental) {
 
         this.name = name;
@@ -48,12 +46,33 @@ public abstract class Check {
 
     public abstract void handleCheck(FPacketEvent packetEvent);
 
-    public void fail() {
+    // I like how ahm does this.
+
+    public final double increaseBuffer(double increase) {
+        buffer = buffer + increase;
+        return buffer;
+    }
+
+    public final double decreaseBuffer(double increase) {
+        buffer = buffer - increase;
+        return buffer;
+    }
+
+    public final void fail() {
         if (data == null) {
             return; // WTF?
         }
         vl++;
         Bukkit.broadcastMessage(data.getPlayer().getName() + " flagged: " + name + type.toUpperCase(Locale.ROOT) + " vl: " + vl);
+    }
+
+
+    public final void fail(final Object info) {
+        if (data == null) {
+            return; // WTF?
+        }
+        vl++;
+        Bukkit.broadcastMessage(data.getPlayer().getName() + " flagged: " + name + type.toUpperCase(Locale.ROOT) + " vl: " + vl + " info: " + info);
     }
 
 

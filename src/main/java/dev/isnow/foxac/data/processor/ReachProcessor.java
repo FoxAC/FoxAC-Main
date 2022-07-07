@@ -4,7 +4,6 @@ import com.github.retrooper.packetevents.event.simple.PacketPlaySendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.util.Vector3d;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientInteractEntity;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMove;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityRelativeMoveAndRotation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityTeleport;
@@ -168,7 +167,7 @@ public class ReachProcessor {
 
         }
 
-        return eDataOptional.get();
+        return eDataOptional.orElse(null);
 
 
     }
@@ -209,7 +208,9 @@ public class ReachProcessor {
              */
 
             //TODO PUT THIS ON PRE TRANSACTION
-            data.getConnectionProcessor().addPreTask(() -> steps = 3);
+            PacketConfirmedAction pca = () -> steps = 3;
+
+            data.getConnectionProcessor().tickAndConfirm(pca);
 
             //TODO PUT THIS ON POST TRANSACTION
 

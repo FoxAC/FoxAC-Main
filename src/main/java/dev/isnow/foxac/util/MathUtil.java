@@ -5,6 +5,7 @@ import dev.isnow.foxac.util.mc.MathHelper;
 import dev.isnow.foxac.util.mc.Vec3;
 import lombok.experimental.UtilityClass;
 import lombok.var;
+import org.bukkit.util.NumberConversions;
 
 import java.util.*;
 
@@ -126,6 +127,7 @@ public class MathUtil {
         float f3 = MathHelper.sin(-pitch * 0.017453292F);
         return new Vec3((double) (f1 * f2), (double) f3, (double) (f * f2));
     }
+
 
 
     public static double getEntropy(Collection<? extends Number> values) {
@@ -293,4 +295,9 @@ public class MathUtil {
 
 
 
-}
+
+    public int getPingTicks(final long ping, final int extraTicks) {
+        return NumberConversions.floor(ping / 50.0D) + extraTicks;
+    }
+
+

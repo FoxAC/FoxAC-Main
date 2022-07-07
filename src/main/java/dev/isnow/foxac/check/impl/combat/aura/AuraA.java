@@ -1,10 +1,7 @@
 package dev.isnow.foxac.check.impl.combat.aura;
 
-import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import dev.isnow.foxac.check.Check;
-import dev.isnow.foxac.data.PlayerData;
 import dev.isnow.foxac.packet.event.FPacketEvent;
-import org.bukkit.Bukkit;
 
 /**
  * @author 5170
@@ -19,8 +16,9 @@ public class AuraA extends Check {
 
     @Override
     public void handleCheck(FPacketEvent packetEvent) {
-        if(packetEvent.getPacketType() == PacketType.Play.Client.PLAYER_FLYING) {
-            //Bukkit.broadcastMessage("works!");
+        if(data.getActionProcessor().isSprinting() && data.getActionProcessor().isAttacking()) {
+            fail(); // this shit is going to false so much, testing purposes only
+
         }
     }
 }
