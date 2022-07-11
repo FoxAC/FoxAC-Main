@@ -29,4 +29,8 @@ public class TimedObservable {
     public boolean hasPassed(int ticks) {
         return ticks <= ticksSinceTrue;
     }
+
+    public boolean hasntPassed(int ticks) {
+        return ticks >= ticksSinceTrue;
+    }
 }

@@ -14,6 +14,12 @@ public class TickRunnable extends BukkitRunnable {
     public void run() {
         for(PlayerData datas : FoxAC.getInstance().getDataManager().getWholeData()) {
             datas.getCollisionProcessor().getSlimeTimer().handleTick();
+            datas.getCollisionProcessor().getClimbableTimer().handleTick();
+            datas.getCollisionProcessor().getIceTimer().handleTick();
+            datas.getCollisionProcessor().getLiquidTimer().handleTick();
+            datas.getCollisionProcessor().getUnderBlockTimer().handleTick();
+            datas.getCollisionProcessor().getHalfBlockTimer().handleTick();
+            datas.getCollisionProcessor().getPistonTimer().handleTick();
         }
 
     }

@@ -37,7 +37,7 @@ public class ConnectionProcessor {
 
     private final PlayerData data;
 
-    private AtomicInteger transactionTick = new AtomicInteger();
+    private final AtomicInteger transactionTick = new AtomicInteger();
 
     private final Map<Short, Long> transactionMap = new HashMap<>();
     private final Deque<Short> transactionDeque = new LinkedList<>();

@@ -3,6 +3,7 @@ package dev.isnow.foxac.data.processor;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import dev.isnow.foxac.FoxAC;
 import dev.isnow.foxac.data.PlayerData;
+import dev.isnow.foxac.tick.TimedObservable;
 import dev.isnow.foxac.util.PlayerUtilities;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -33,11 +33,11 @@ public class SpeedA extends Check {
 
             final boolean sprinting = data.getActionProcessor().isSprinting();
 
-            final double lastDeltaX = data.getPositionProcessor().getLastMotionX();
-            final double lastDeltaZ = data.getPositionProcessor().getLastMotionZ();
+            final double lastMotionX = data.getPositionProcessor().getLastMotionX();
+            final double lastMotionZ = data.getPositionProcessor().getLastMotionZ();
 
-            final double deltaXZ = data.getPositionProcessor().getMotionXZ();
-            final double deltaY = data.getPositionProcessor().getMotionY();
+            final double motionXZ = data.getPositionProcessor().getMotionXZ();
+            final double motionY = data.getPositionProcessor().getMotionY();
 
             final int groundTicks = data.getPositionProcessor().getClientGroundTicks();
             final int airTicks = data.getPositionProcessor().getClientAirTicks();
@@ -52,22 +52,21 @@ public class SpeedA extends Check {
             double airLimit = 0.3615 + limit;
 
 
-            if (Math.abs(deltaY - jumpMotion) < 1.0E-4 && airTicks == 1 && sprinting) {
+            if (Math.abs(motionY - jumpMotion) < 1.0E-4 && airTicks == 1 && sprinting) {
                 final float f = data.getRotationProcessor().getMouseY() * 0.017453292F;
 
-                final double x = lastDeltaX - (Math.sin(f) * 0.2F);
-                final double z = lastDeltaZ + (Math.cos(f) * 0.2F);
+                final double x = lastMotionX - (Math.sin(f) * 0.2F);
+                final double z = lastMotionZ + (Math.cos(f) * 0.2F);
 
                 airLimit += Math.hypot(x, z);
                 modifiers = modifiers + ", jump";
             }
 
-            // TODO: Add timers
-//            if (data.getCollisionProcessor().getSinceSlimeTicks() || data.getCollisionProcessor().getSinceIceTicks() < 15) {
-//                airLimit += 0.34F;
-//                groundLimit += 0.34F;
-//                modifiers = modifiers + ", ice/slime";
-//            }
+            if (data.getCollisionProcessor().getSlimeTimer().hasntPassed(15)|| data.getCollisionProcessor().getIceTimer().hasntPassed(15)) {
+                airLimit += 0.34F;
+                groundLimit += 0.34F;
+                modifiers = modifiers + ", ice/slime";
+            }
 
             if (data.getCollisionProcessor().isUnderBlock()) {
                 airLimit += 0.91F;
@@ -100,18 +99,18 @@ public class SpeedA extends Check {
 
             if (airTicks > 0) {
                 modifiers = modifiers + ", Air";
-                if (deltaXZ > airLimit) {
+                if (motionXZ > airLimit) {
                     if (increaseBuffer(1) > 3) {
-                        fail("MotionXZ: " + deltaXZ + " Modifiers:" + modifiers);
+                        fail("MotionXZ: " + motionXZ + " Modifiers:" + modifiers);
                     }
                 } else {
                     decreaseBuffer(0.15);
                 }
             } else {
                 modifiers = modifiers + ", Ground";
-                if (deltaXZ > groundLimit) {
+                if (motionXZ > groundLimit) {
                     if (increaseBuffer(1) > 7) {
-                        fail("MotionXZ: " + deltaXZ + " Modifiers:" + modifiers);
+                        fail("MotionXZ: " + motionXZ + " Modifiers:" + modifiers);
                     }
                 } else {
                     decreaseBuffer(0.2);

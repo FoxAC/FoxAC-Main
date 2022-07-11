@@ -25,7 +25,15 @@ public class CollisionProcessor {
 
 
   
-    private TimedObservable slimeTimer = new TimedObservable(false);
+    private final TimedObservable slimeTimer = new TimedObservable(false);
+    private final TimedObservable iceTimer = new TimedObservable(false);
+    private final TimedObservable liquidTimer = new TimedObservable(false);
+    private final TimedObservable halfBlockTimer = new TimedObservable(false);
+    private final TimedObservable climbableTimer = new TimedObservable(false);
+    private final TimedObservable pistonTimer = new TimedObservable(false);
+    private final TimedObservable underBlockTimer = new TimedObservable(false);
+
+
     private boolean lastServerInAir, serverInAir, slime, ice, liquid, halfBlock, web, climbable, underBlock, piston;
 
     void updateCollisions() {
@@ -51,12 +59,16 @@ public class CollisionProcessor {
             climbable = pair.getKey().toString().contains("LADDER") || pair.getKey().toString().contains("VINE");
             piston = pair.getKey().toString().contains("PISTON");
 
-            if (slime) {
-                slimeTimer.setValue(true);
-            } else slimeTimer.setValue(false);
+            slimeTimer.setValue(slime);
+            iceTimer.setValue(ice);
+            liquidTimer.setValue(liquid);
+            halfBlockTimer.setValue(halfBlock);
+            climbableTimer.setValue(climbable);
+            pistonTimer.setValue(piston);
 
             // FIXME: flags when touching a wall.
             if (pair.getValue().getY() >= box.minY && pair.getKey().isSolid()) underBlock = true;
+            underBlockTimer.setValue(underBlock);
         }
     }
 }
